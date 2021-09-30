@@ -103,6 +103,9 @@ for i in range(NR_OF_TRUCKS):
     nuzzle_constraint = (nuzzles_in_trucks[i] <= MAX_NUZZLE_PALLETS_PER_TRUCK)
     optimizer.add(nuzzle_constraint)
 
+    optimizer.add(Implies(prittles_in_trucks[i] > 0, crottles_in_trucks[i] == 0))
+    optimizer.add(Implies(crottles_in_trucks[i] > 0, prittles_in_trucks[i] == 0))
+
     # Trucks 0..MAX_COOLING_TRUCKS have a cooling facility
     if i >= MAX_COOLING_TRUCKS:
         optimizer.add(skipples_in_trucks[i] == 0)
