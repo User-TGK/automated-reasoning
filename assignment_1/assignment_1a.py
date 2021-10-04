@@ -33,11 +33,11 @@ optimizer = Optimize()
 
 # Create the variables
 
-nuzzles_in_trucks = [Int(f"TPN{s}") for s in range(NR_OF_TRUCKS)]
-prittles_in_trucks = [Int(f"TPP{s}") for s in range(NR_OF_TRUCKS)]
-skipples_in_trucks = [Int(f"TPS{s}") for s in range(NR_OF_TRUCKS)]
-crottles_in_trucks = [Int(f"TPC{s}") for s in range(NR_OF_TRUCKS)]
-dupples_in_trucks = [Int(f"TPD{s}") for s in range(NR_OF_TRUCKS)]
+nuzzles_in_trucks = [Int(f"TPN{s+1}") for s in range(NR_OF_TRUCKS)]
+prittles_in_trucks = [Int(f"TPP{s+1}") for s in range(NR_OF_TRUCKS)]
+skipples_in_trucks = [Int(f"TPS{s+1}") for s in range(NR_OF_TRUCKS)]
+crottles_in_trucks = [Int(f"TPC{s+1}") for s in range(NR_OF_TRUCKS)]
+dupples_in_trucks = [Int(f"TPD{s+1}") for s in range(NR_OF_TRUCKS)]
 
 # Add constraints for transporting the required amount of pallets
 # ------------------------------------------------

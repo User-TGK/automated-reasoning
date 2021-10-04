@@ -1,3 +1,4 @@
+(declare-fun TPD8 () Int)
 (declare-fun TPD7 () Int)
 (declare-fun TPD6 () Int)
 (declare-fun TPD5 () Int)
@@ -5,7 +6,7 @@
 (declare-fun TPD3 () Int)
 (declare-fun TPD2 () Int)
 (declare-fun TPD1 () Int)
-(declare-fun TPD0 () Int)
+(declare-fun TPC8 () Int)
 (declare-fun TPC7 () Int)
 (declare-fun TPC6 () Int)
 (declare-fun TPC5 () Int)
@@ -13,7 +14,7 @@
 (declare-fun TPC3 () Int)
 (declare-fun TPC2 () Int)
 (declare-fun TPC1 () Int)
-(declare-fun TPC0 () Int)
+(declare-fun TPS8 () Int)
 (declare-fun TPS7 () Int)
 (declare-fun TPS6 () Int)
 (declare-fun TPS5 () Int)
@@ -21,7 +22,7 @@
 (declare-fun TPS3 () Int)
 (declare-fun TPS2 () Int)
 (declare-fun TPS1 () Int)
-(declare-fun TPS0 () Int)
+(declare-fun TPN8 () Int)
 (declare-fun TPN7 () Int)
 (declare-fun TPN6 () Int)
 (declare-fun TPN5 () Int)
@@ -29,8 +30,6 @@
 (declare-fun TPN3 () Int)
 (declare-fun TPN2 () Int)
 (declare-fun TPN1 () Int)
-(declare-fun TPN0 () Int)
-(declare-fun TPP0 () Int)
 (declare-fun TPP1 () Int)
 (declare-fun TPP2 () Int)
 (declare-fun TPP3 () Int)
@@ -38,20 +37,11 @@
 (declare-fun TPP5 () Int)
 (declare-fun TPP6 () Int)
 (declare-fun TPP7 () Int)
-(assert (and (= (+ TPN0 TPN1 TPN2 TPN3 TPN4 TPN5 TPN6 TPN7) 4)
-     (= (+ TPS0 TPS1 TPS2 TPS3 TPS4 TPS5 TPS6 TPS7) 8)
-     (= (+ TPC0 TPC1 TPC2 TPC3 TPC4 TPC5 TPC6 TPC7) 10)
-     (= (+ TPD0 TPD1 TPD2 TPD3 TPD4 TPD5 TPD6 TPD7) 20)))
-(assert (>= TPN0 0))
-(assert (>= TPP0 0))
-(assert (>= TPS0 0))
-(assert (>= TPC0 0))
-(assert (>= TPD0 0))
-(assert (<= (+ (* TPN0 700) (* TPP0 400) (* TPS0 1000) (* TPC0 2500) (* TPD0 200)) 8000))
-(assert (<= (+ TPN0 TPP0 TPS0 TPC0 TPD0) 8))
-(assert (<= TPN0 1))
-(assert (=> (> TPP0 0) (= TPC0 0)))
-(assert (=> (> TPC0 0) (= TPP0 0)))
+(declare-fun TPP8 () Int)
+(assert (and (= (+ TPN1 TPN2 TPN3 TPN4 TPN5 TPN6 TPN7 TPN8) 4)
+     (= (+ TPS1 TPS2 TPS3 TPS4 TPS5 TPS6 TPS7 TPS8) 8)
+     (= (+ TPC1 TPC2 TPC3 TPC4 TPC5 TPC6 TPC7 TPC8) 10)
+     (= (+ TPD1 TPD2 TPD3 TPD4 TPD5 TPD6 TPD7 TPD8) 20)))
 (assert (>= TPN1 0))
 (assert (>= TPP1 0))
 (assert (>= TPS1 0))
@@ -82,7 +72,6 @@
 (assert (<= TPN3 1))
 (assert (=> (> TPP3 0) (= TPC3 0)))
 (assert (=> (> TPC3 0) (= TPP3 0)))
-(assert (= TPS3 0))
 (assert (>= TPN4 0))
 (assert (>= TPP4 0))
 (assert (>= TPS4 0))
@@ -127,47 +116,17 @@
 (assert (=> (> TPP7 0) (= TPC7 0)))
 (assert (=> (> TPC7 0) (= TPP7 0)))
 (assert (= TPS7 0))
-(maximize (+ TPP0 TPP1 TPP2 TPP3 TPP4 TPP5 TPP6 TPP7))
+(assert (>= TPN8 0))
+(assert (>= TPP8 0))
+(assert (>= TPS8 0))
+(assert (>= TPC8 0))
+(assert (>= TPD8 0))
+(assert (<= (+ (* TPN8 700) (* TPP8 400) (* TPS8 1000) (* TPC8 2500) (* TPD8 200)) 8000))
+(assert (<= (+ TPN8 TPP8 TPS8 TPC8 TPD8) 8))
+(assert (<= TPN8 1))
+(assert (=> (> TPP8 0) (= TPC8 0)))
+(assert (=> (> TPC8 0) (= TPP8 0)))
+(assert (= TPS8 0))
+(maximize (+ TPP1 TPP2 TPP3 TPP4 TPP5 TPP6 TPP7 TPP8))
 (check-sat)
-
-sat
-[TPC6 = 2,
- TPN2 = 1,
- TPN1 = 0,
- TPN6 = 1,
- TPS2 = 2,
- TPD3 = 5,
- TPD2 = 1,
- TPD4 = 0,
- TPD5 = 0,
- TPN5 = 0,
- TPC5 = 0,
- TPP2 = 0,
- TPP6 = 0,
- TPP0 = 0,
- TPP7 = 0,
- TPP4 = 8,
- TPC2 = 2,
- TPN4 = 0,
- TPN3 = 1,
- TPD6 = 5,
- TPS1 = 4,
- TPN7 = 1,
- TPC4 = 0,
- TPP3 = 0,
- TPD1 = 0,
- TPC3 = 2,
- TPD7 = 5,
- TPP1 = 4,
- TPC7 = 2,
- TPP5 = 8,
- TPC1 = 0,
- TPS7 = 0,
- TPS6 = 0,
- TPS5 = 0,
- TPS4 = 0,
- TPS3 = 0,
- TPD0 = 4,
- TPC0 = 2,
- TPS0 = 2,
- TPN0 = 0]
+(get-model)
