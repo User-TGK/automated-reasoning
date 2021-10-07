@@ -1,6 +1,8 @@
 from z3 import *
 from typing import Final
 
+import cairo
+
 # We are looking for {rcx1,...,rcx10}, {rcy1,...,rcy10}, {pcx1,pcx2} and {pcy1,pcx2}
 # such that the chip design satisfies all constrains.
 
@@ -33,6 +35,62 @@ power_component_xs = []
 power_component_ys = []
 
 s = Solver()
+
+
+def draw_solution(model):
+    with cairo.SVGSurface("2.svg", 1000, 1000) as surface:
+        context = cairo.Context(surface)
+        context.scale(CHIP_WIDTH / 3, CHIP_HEIGHT / 3)
+        context.set_line_width(0.03)
+
+        for i in range(CHIP_WIDTH + 1):
+            context.move_to(i, 0)
+            context.line_to(i, CHIP_WIDTH)
+            context.stroke()
+
+        for j in range(CHIP_HEIGHT + 1):
+            context.move_to(0, j)
+            context.line_to(CHIP_HEIGHT, j)
+            context.stroke()
+
+        # draw normal components
+        context.set_font_size(2)
+
+        context.set_line_width(0.1)
+
+        for i in range(len(regular_component_sizes)):
+            x = model[regular_component_xs[i]].as_long()
+            y = model[regular_component_ys[i]].as_long()
+            w = model[regular_component_widths[i]].as_long()
+            h = model[regular_component_heights[i]].as_long()
+
+            context.rectangle(x, y, w, h)
+            context.set_source_rgba(0, 0, 1, 1)
+            context.stroke_preserve()
+            context.set_source_rgba(0, 0, 1, 0.5)
+            context.fill()
+
+            context.set_source_rgba(1, 1, 1, 1)
+            context.move_to(x + 0.05, y + 2.0)
+            context.show_text(f"C{i+1}")
+
+        # draw power components
+        context.set_line_width(0.1)
+        for i in range(len(power_component_sizes)):
+            x = model[power_component_xs[i]].as_long()
+            y = model[power_component_ys[i]].as_long()
+            w = model[power_component_widths[i]].as_long()
+            h = model[power_component_heights[i]].as_long()
+
+            context.rectangle(x, y, w, h)
+            context.set_source_rgba(1, 0, 0, 1)
+            context.stroke_preserve()
+            context.set_source_rgba(1, 0, 0, 0.5)
+            context.fill()
+
+            context.set_source_rgba(1, 1, 1, 1)
+            context.move_to(x, y + 2.0)
+            context.show_text(f"P{i+1}")
 
 
 def abs(x):
@@ -83,17 +141,50 @@ for i, (w, h) in enumerate(regular_component_sizes):
                  rcyi + rchi <= rcyj,
                  rcyj + rchj <= rcyi))
 
-    # Constrains for the components to not overlap with other (power) components
+    connected_constraints = []
+
     for j, _ in enumerate(power_component_sizes):
         pcxj = power_component_xs[j]
         pcyj = power_component_ys[j]
         pcwj = power_component_widths[j]
         pchj = power_component_heights[j]
 
-        s.add(Or(rcxi + rcwi <= pcxj,
-                 pcxj + pcwj <= rcxi,
-                 rcyi + rchi <= pcyj,
-                 pcyj + pchj <= rcyi))
+        # Constrains for the components to not overlap with other (power) components
+        s.add(Or(
+            rcxi + rcwi <= pcxj,  # RC left from PC
+            pcxj + pcwj <= rcxi,  # RC right from PC
+            rcyi + rchi <= pcyj,  # RC below PC
+            pcyj + pchj <= rcyi   # RC above PC
+        ))
+
+        # Case distinction: vertically connected
+        connected_constraints.append(
+            And(
+                Or(
+                    rcyi == pcyj + pchj,  # RC above PC
+                    pcyj == rcyi + rchi   # PC above RC
+                ),
+                Or(
+                    And(rcxi >= pcxj, rcxi < pcxj + pcwj),
+                    And(rcxi < pcxj, rcxi + rcwi > pcxj)
+                )
+            )
+        )
+        # Case distinction: horizontally connected
+        connected_constraints.append(
+            And(
+                Or(
+                    rcxi == pcxj + pcwj,  # RC right of PC
+                    pcxj == rcxi + rcwi   # PC left of RC
+                ),
+                Or(
+                    And(rcyi >= pcyj, rcyi < pcyj + pchj),
+                    And(rcyi < pcyj, rcyi + rchi > pcyj)
+                )
+            )
+        )
+
+    s.add(Or(*connected_constraints))
 
 # Constrains for the power components
 for i, (w, h) in enumerate(power_component_sizes):
@@ -129,9 +220,11 @@ for i, (w, h) in enumerate(power_component_sizes):
                  pcyj + pchj <= pcyi))
 
         # Minimum distance between centers
-        s.add(Or(abs((pcxi + 0.5 * pcwi) - (pcxj + 0.5 * pcwj)) >= MIN_POWER_COMPONENT_DISTANCE,
-                 abs((pcyi + 0.5 * pchi) - (pcyj + 0.5 * pchj)) >= MIN_POWER_COMPONENT_DISTANCE))
+        # s.add(Or(abs((pcxi + 0.5 * pcwi) - (pcxj + 0.5 * pcwj)) >= MIN_POWER_COMPONENT_DISTANCE,
+        #          abs((pcyi + 0.5 * pchi) - (pcyj + 0.5 * pchj)) >= MIN_POWER_COMPONENT_DISTANCE))
 
 
 print(s.check())
-print(s.model())
+# print(s.model())
+
+draw_solution(s.model())
