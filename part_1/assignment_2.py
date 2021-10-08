@@ -13,7 +13,7 @@ CHIP_WIDTH: Final = 30
 CHIP_HEIGHT: Final = 30
 
 # The minimum distance between the center of two arbitrary power components
-MIN_POWER_COMPONENT_DISTANCE: Final = 16
+MIN_POWER_COMPONENT_DISTANCE: Final = 17
 
 # Given (w, h) size of the 10 regular components
 regular_component_sizes = [
@@ -220,11 +220,13 @@ for i, (w, h) in enumerate(power_component_sizes):
                  pcyj + pchj <= pcyi))
 
         # Minimum distance between centers
-        # s.add(Or(abs((pcxi + 0.5 * pcwi) - (pcxj + 0.5 * pcwj)) >= MIN_POWER_COMPONENT_DISTANCE,
-        #          abs((pcyi + 0.5 * pchi) - (pcyj + 0.5 * pchj)) >= MIN_POWER_COMPONENT_DISTANCE))
+        s.add(Or(abs(2 * pcxi + pcwi - (2 * pcxj + pcwj)) >= 2 * MIN_POWER_COMPONENT_DISTANCE,
+                 abs((2 * pcyi + pchi) - (2 * pcyj + pchj)) >= 2 * MIN_POWER_COMPONENT_DISTANCE))
 
 
-print(s.check())
+# print(s.check())
 # print(s.model())
+s.check()
+print(s.sexpr())
 
 draw_solution(s.model())
