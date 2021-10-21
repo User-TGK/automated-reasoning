@@ -122,17 +122,17 @@ for i in range(NR_OF_PERSONS):
         persons_encounter_per_round.append(meet_per_round)
 
 for i in range(len(persons_encounter_per_round)):
-    s.add(Sum(bool_to_int_array(
-        persons_encounter_per_round[i])) <= MAX_ENCOUNTERS)
+    # s.add(Sum(bool_to_int_array(
+    #     persons_encounter_per_round[i])) <= MAX_ENCOUNTERS)
 
 
-    # (A): Every two people among the 10 participants meet each other at least once
-    s.add(Sum(bool_to_int_array(
-        persons_encounter_per_round[i])) >= MIN_ENCOUNTERS)
+    # # (A): Every two people among the 10 participants meet each other at least once
+    # s.add(Sum(bool_to_int_array(
+    #     persons_encounter_per_round[i])) >= MIN_ENCOUNTERS)
 
-    # # (B): Every two people among the 10 participants meet each other at most 3 times
-    #  s.add(Sum(bool_to_int_array(
-    #     persons_encounter_per_round[i])) <= 3)
+    # (B): Every two people among the 10 participants meet each other at most 3 times
+     s.add(Sum(bool_to_int_array(
+        persons_encounter_per_round[i])) <= 3)
 
 
 for i in range(NR_OF_PERSONS):

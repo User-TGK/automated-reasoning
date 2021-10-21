@@ -13,7 +13,7 @@ CHIP_WIDTH: Final = 30
 CHIP_HEIGHT: Final = 30
 
 # The minimum distance between the center of two arbitrary power components
-MIN_POWER_COMPONENT_DISTANCE: Final = 17
+MIN_POWER_COMPONENT_DISTANCE: Final = 18
 
 # Given (w, h) size of the 10 regular components
 regular_component_sizes = [

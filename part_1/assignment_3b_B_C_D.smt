@@ -87,8 +87,8 @@ Person 8 meets person 5 in rounds [1, 4, 5]
 Person 8 meets person 6 in rounds [1, 2]
 Person 8 meets person 7 in rounds [2, 5]
 Person 8 meets person 9 in rounds [3, 4, 5]
-Person 9 meets person 10 in rounds [1, 4]
 
+Person 9 meets person 10 in rounds [1, 4]
 Person 9 meets person 1 in rounds [2, 3, 5]
 Person 9 meets person 2 in rounds [1, 3]
 Person 9 meets person 3 in rounds [1, 2]
@@ -264,6 +264,7 @@ r3h5p6= False
 r3h5p7= False
 r3h5p8= False
 r3h5p9= False
+
 
 r4h1p10= False
 r4h1p1= True
