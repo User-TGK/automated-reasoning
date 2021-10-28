@@ -109,6 +109,7 @@ for i in range(NR_OF_TRUCKS):
 
 optimizer.maximize(Sum(prittles_in_trucks))
 
-print(optimizer)
-print(optimizer.check())
+# print(optimizer)
+# print(optimizer.check())
+optimizer.check()
 print(optimizer.model())
