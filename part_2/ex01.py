@@ -13,10 +13,13 @@ FILE_NAME: Final = 'ex01.smv'
 
 smv_file = open(FILE_NAME, 'w')
 
-smv_file.write('MODULE rout(n,m)\n')
-
+smv_file.write('\nMODULE main\n')
 smv_file.write('VAR\n')
-smv_file.write(f'c : 0..{NR_OF_CHANNELS};\n')
+
+for i in range (1, NR_OF_CHANNELS+1):
+    smv_file.write(f'c{i} : 0..{NR_OF_NODES};\n')
+
+smv_file.write(f'm : {{ {", ".join(map(str, M))} }};\n')
 
 smv_file.write('DEFINE routing := [\n')
 smv_file.write('    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],\n')
@@ -38,23 +41,7 @@ smv_file.write('    [16, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
 smv_file.write('    [24, 24, 18, 18, 18, 18, 20, 20, 20, 20, 22, 22, 22, 22, 24, 24, 0]\n')
 smv_file.write('];\n')
 
-smv_file.write('ASSIGN\n')
-smv_file.write('c := routing[n][m];\n')
-
-smv_file.write('\nMODULE target(c)\n')
-smv_file.write('VAR\n')
-smv_file.write(f'n : 1..{NR_OF_NODES};\n')
 smv_file.write('DEFINE targets := [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 17, 3, 17, 7, 17, 11, 17, 15, 2, 6, 10];\n')
-smv_file.write('ASSIGN\n')
-smv_file.write('n := targets[c];\n')
-
-smv_file.write('\nMODULE main\n')
-smv_file.write('VAR\n')
-
-for i in range (1, NR_OF_CHANNELS+1):
-    smv_file.write(f'c{i} : 0..{NR_OF_NODES};\n')
-
-smv_file.write(f'm : {{ {", ".join(map(str, M))} }}\n')
 
 smv_file.write('ASSIGN\n')
 
@@ -65,8 +52,13 @@ smv_file.write('TRANS\n')
 
 for i in range (1, NR_OF_CHANNELS+1):
     # TODO: Send step
+    
+    delim = ''
+    if i > 1:
+        delim = '|'
 
     # Receive step
-    smv_file.write(f'case c{i} = target(c{i}) : next(c{i}) = 0;\n')
+    smv_file.write(f'{delim} case c{i} = targets[c{i}] : next(c{i}) = 0;\n')
+    smv_file.write(f'TRUE : next(c{i}) = c{i}; esac\n')
 
     # TODO: Process step
