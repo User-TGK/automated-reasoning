@@ -1,0 +1,11 @@
+MODULE main
+VAR
+a : 0..100;
+INIT
+a = 1
+TRANS
+case a<=95 : next(a) = a + 5;
+TRUE : next(a)=a; esac |
+case a<=50 : next(a) = 2*a;
+TRUE : next(a)=a; esac
+CTLSPEC EF (a=98)
