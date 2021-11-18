@@ -1,6 +1,5 @@
 from typing import Final
 
-
 # State space is defined as NR_OF_NODES^NR_OF_CHANNELS
 NR_OF_CHANNELS: Final = 27
 NR_OF_NODES: Final = 17
@@ -9,18 +8,18 @@ M: Final = [1, 5, 9, 13];
 
 FILE_NAME: Final = 'ex01.smv'
 
-
-
 smv_file = open(FILE_NAME, 'w')
 
 smv_file.write('\nMODULE main\n')
 smv_file.write('VAR\n')
 
 for i in range (1, NR_OF_CHANNELS+1):
-    smv_file.write(f'c{i} : 0..{NR_OF_NODES};\n')
+    smv_file.write(f'c{i} : 0..{NR_OF_NODES-1};\n')
 
 smv_file.write(f'm : {{ {", ".join(map(str, M))} }};\n')
 
+smv_file.write('DEFINE sources := [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 3, 17, 7, 17, 11, 17, 15, 17, 16, 4, 8];\n')
+smv_file.write('DEFINE targets := [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 17, 3, 17, 7, 17, 11, 17, 15, 2, 6, 10];\n')
 smv_file.write('DEFINE routes := [\n')
 smv_file.write('    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],\n')
 smv_file.write('    [2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],\n')
@@ -41,9 +40,6 @@ smv_file.write('    [16, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25,
 smv_file.write('    [24, 24, 18, 18, 18, 18, 20, 20, 20, 20, 22, 22, 22, 22, 24, 24, 0]\n')
 smv_file.write('];\n')
 
-smv_file.write('DEFINE targets := [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 17, 3, 17, 7, 17, 11, 17, 15, 2, 6, 10];\n')
-smv_file.write('DEFINE sources := [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 3, 17, 7, 17, 11, 17, 15, 17, 16, 4, 8];\n')
-
 smv_file.write('ASSIGN\n')
 
 for i in range (1, NR_OF_CHANNELS+1):
@@ -54,14 +50,15 @@ smv_file.write('TRANS\n')
 delim = ''
 
 for i in range (1, NR_OF_CHANNELS+1):
-    # TODO: Send step
+    if i == 2:
+        delim = '|' 
+
+    # Send step
     smv_file.write(f'{delim} case c{i} != 0 & routes[sources[{i-1}] - 1][c{i}] = 0 : next(routes[sources[{i-1}] - 1][c{i}]) = c{i} & next(c{i}) = 0;\n')
-    smv_file.write(f'TRUE : next(c{i}) = c{i}; esac\n')
-
-    delim = '|'
-
     # Receive step
-    smv_file.write(f'{delim} case c{i} = targets[c{i}] : next(c{i}) = 0;\n')
-    smv_file.write(f'TRUE : next(c{i}) = c{i}; esac\n')
-
+    smv_file.write(f'c{i} = targets[c{i}] : next(c{i}) = 0;\n')
     # TODO: Process step
+    # [Insert process step here]
+    # Else it stays the same (for now)
+    smv_file.write(f'TRUE : next(c{i}) = c{i}; esac\n')
+    
