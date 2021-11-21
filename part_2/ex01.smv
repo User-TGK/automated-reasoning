@@ -28,7 +28,7 @@ c24 : 0..16;
 c25 : 0..16;
 c26 : 0..16;
 c27 : 0..16;
-m : { 1, 5, 9, 13 };
+m := [1, 5, 9, 13];
 DEFINE sources := [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 3, 17, 7, 17, 11, 17, 15, 17, 16, 4, 8];
 DEFINE targets := [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 17, 3, 17, 7, 17, 11, 17, 15, 2, 6, 10];
 DEFINE routes := [
@@ -79,84 +79,245 @@ init(c25) := 0;
 init(c26) := 0;
 init(c27) := 0;
 TRANS
- case c1 != 0 & routes[sources[0] - 1][c1] = 0 : next(routes[sources[0] - 1][c1]) = c1 & next(c1) = 0;
-c1 = targets[c1] : next(c1) = 0;
+case c1 != 0 & routes[sources[0] - 1][c1] == 0 : next(routes[sources[0] - 1][c1]) = c1 & next(c1) = 0;
 TRUE : next(c1) = c1; esac
-| case c2 != 0 & routes[sources[1] - 1][c2] = 0 : next(routes[sources[1] - 1][c2]) = c2 & next(c2) = 0;
-c2 = targets[c2] : next(c2) = 0;
+|
+case c1 == targets[c1] : next(c1) = 0;
+TRUE : next(c1) = c1; esac
+|
+case c1 != 0 & targets[c1] != m & c-targets[c1] == 0 : next(?) & next(c1) = 0;
+TRUE : next(c1) = c1; esac
+|
+case c2 != 0 & routes[sources[1] - 1][c2] == 0 : next(routes[sources[1] - 1][c2]) = c2 & next(c2) = 0;
 TRUE : next(c2) = c2; esac
-| case c3 != 0 & routes[sources[2] - 1][c3] = 0 : next(routes[sources[2] - 1][c3]) = c3 & next(c3) = 0;
-c3 = targets[c3] : next(c3) = 0;
+|
+case c2 == targets[c2] : next(c2) = 0;
+TRUE : next(c2) = c2; esac
+|
+case c2 != 0 & targets[c2] != m & c-targets[c2] == 0 : next(?) & next(c2) = 0;
+TRUE : next(c2) = c2; esac
+|
+case c3 != 0 & routes[sources[2] - 1][c3] == 0 : next(routes[sources[2] - 1][c3]) = c3 & next(c3) = 0;
 TRUE : next(c3) = c3; esac
-| case c4 != 0 & routes[sources[3] - 1][c4] = 0 : next(routes[sources[3] - 1][c4]) = c4 & next(c4) = 0;
-c4 = targets[c4] : next(c4) = 0;
+|
+case c3 == targets[c3] : next(c3) = 0;
+TRUE : next(c3) = c3; esac
+|
+case c3 != 0 & targets[c3] != m & c-targets[c3] == 0 : next(?) & next(c3) = 0;
+TRUE : next(c3) = c3; esac
+|
+case c4 != 0 & routes[sources[3] - 1][c4] == 0 : next(routes[sources[3] - 1][c4]) = c4 & next(c4) = 0;
 TRUE : next(c4) = c4; esac
-| case c5 != 0 & routes[sources[4] - 1][c5] = 0 : next(routes[sources[4] - 1][c5]) = c5 & next(c5) = 0;
-c5 = targets[c5] : next(c5) = 0;
+|
+case c4 == targets[c4] : next(c4) = 0;
+TRUE : next(c4) = c4; esac
+|
+case c4 != 0 & targets[c4] != m & c-targets[c4] == 0 : next(?) & next(c4) = 0;
+TRUE : next(c4) = c4; esac
+|
+case c5 != 0 & routes[sources[4] - 1][c5] == 0 : next(routes[sources[4] - 1][c5]) = c5 & next(c5) = 0;
 TRUE : next(c5) = c5; esac
-| case c6 != 0 & routes[sources[5] - 1][c6] = 0 : next(routes[sources[5] - 1][c6]) = c6 & next(c6) = 0;
-c6 = targets[c6] : next(c6) = 0;
+|
+case c5 == targets[c5] : next(c5) = 0;
+TRUE : next(c5) = c5; esac
+|
+case c5 != 0 & targets[c5] != m & c-targets[c5] == 0 : next(?) & next(c5) = 0;
+TRUE : next(c5) = c5; esac
+|
+case c6 != 0 & routes[sources[5] - 1][c6] == 0 : next(routes[sources[5] - 1][c6]) = c6 & next(c6) = 0;
 TRUE : next(c6) = c6; esac
-| case c7 != 0 & routes[sources[6] - 1][c7] = 0 : next(routes[sources[6] - 1][c7]) = c7 & next(c7) = 0;
-c7 = targets[c7] : next(c7) = 0;
+|
+case c6 == targets[c6] : next(c6) = 0;
+TRUE : next(c6) = c6; esac
+|
+case c6 != 0 & targets[c6] != m & c-targets[c6] == 0 : next(?) & next(c6) = 0;
+TRUE : next(c6) = c6; esac
+|
+case c7 != 0 & routes[sources[6] - 1][c7] == 0 : next(routes[sources[6] - 1][c7]) = c7 & next(c7) = 0;
 TRUE : next(c7) = c7; esac
-| case c8 != 0 & routes[sources[7] - 1][c8] = 0 : next(routes[sources[7] - 1][c8]) = c8 & next(c8) = 0;
-c8 = targets[c8] : next(c8) = 0;
+|
+case c7 == targets[c7] : next(c7) = 0;
+TRUE : next(c7) = c7; esac
+|
+case c7 != 0 & targets[c7] != m & c-targets[c7] == 0 : next(?) & next(c7) = 0;
+TRUE : next(c7) = c7; esac
+|
+case c8 != 0 & routes[sources[7] - 1][c8] == 0 : next(routes[sources[7] - 1][c8]) = c8 & next(c8) = 0;
 TRUE : next(c8) = c8; esac
-| case c9 != 0 & routes[sources[8] - 1][c9] = 0 : next(routes[sources[8] - 1][c9]) = c9 & next(c9) = 0;
-c9 = targets[c9] : next(c9) = 0;
+|
+case c8 == targets[c8] : next(c8) = 0;
+TRUE : next(c8) = c8; esac
+|
+case c8 != 0 & targets[c8] != m & c-targets[c8] == 0 : next(?) & next(c8) = 0;
+TRUE : next(c8) = c8; esac
+|
+case c9 != 0 & routes[sources[8] - 1][c9] == 0 : next(routes[sources[8] - 1][c9]) = c9 & next(c9) = 0;
 TRUE : next(c9) = c9; esac
-| case c10 != 0 & routes[sources[9] - 1][c10] = 0 : next(routes[sources[9] - 1][c10]) = c10 & next(c10) = 0;
-c10 = targets[c10] : next(c10) = 0;
+|
+case c9 == targets[c9] : next(c9) = 0;
+TRUE : next(c9) = c9; esac
+|
+case c9 != 0 & targets[c9] != m & c-targets[c9] == 0 : next(?) & next(c9) = 0;
+TRUE : next(c9) = c9; esac
+|
+case c10 != 0 & routes[sources[9] - 1][c10] == 0 : next(routes[sources[9] - 1][c10]) = c10 & next(c10) = 0;
 TRUE : next(c10) = c10; esac
-| case c11 != 0 & routes[sources[10] - 1][c11] = 0 : next(routes[sources[10] - 1][c11]) = c11 & next(c11) = 0;
-c11 = targets[c11] : next(c11) = 0;
+|
+case c10 == targets[c10] : next(c10) = 0;
+TRUE : next(c10) = c10; esac
+|
+case c10 != 0 & targets[c10] != m & c-targets[c10] == 0 : next(?) & next(c10) = 0;
+TRUE : next(c10) = c10; esac
+|
+case c11 != 0 & routes[sources[10] - 1][c11] == 0 : next(routes[sources[10] - 1][c11]) = c11 & next(c11) = 0;
 TRUE : next(c11) = c11; esac
-| case c12 != 0 & routes[sources[11] - 1][c12] = 0 : next(routes[sources[11] - 1][c12]) = c12 & next(c12) = 0;
-c12 = targets[c12] : next(c12) = 0;
+|
+case c11 == targets[c11] : next(c11) = 0;
+TRUE : next(c11) = c11; esac
+|
+case c11 != 0 & targets[c11] != m & c-targets[c11] == 0 : next(?) & next(c11) = 0;
+TRUE : next(c11) = c11; esac
+|
+case c12 != 0 & routes[sources[11] - 1][c12] == 0 : next(routes[sources[11] - 1][c12]) = c12 & next(c12) = 0;
 TRUE : next(c12) = c12; esac
-| case c13 != 0 & routes[sources[12] - 1][c13] = 0 : next(routes[sources[12] - 1][c13]) = c13 & next(c13) = 0;
-c13 = targets[c13] : next(c13) = 0;
+|
+case c12 == targets[c12] : next(c12) = 0;
+TRUE : next(c12) = c12; esac
+|
+case c12 != 0 & targets[c12] != m & c-targets[c12] == 0 : next(?) & next(c12) = 0;
+TRUE : next(c12) = c12; esac
+|
+case c13 != 0 & routes[sources[12] - 1][c13] == 0 : next(routes[sources[12] - 1][c13]) = c13 & next(c13) = 0;
 TRUE : next(c13) = c13; esac
-| case c14 != 0 & routes[sources[13] - 1][c14] = 0 : next(routes[sources[13] - 1][c14]) = c14 & next(c14) = 0;
-c14 = targets[c14] : next(c14) = 0;
+|
+case c13 == targets[c13] : next(c13) = 0;
+TRUE : next(c13) = c13; esac
+|
+case c13 != 0 & targets[c13] != m & c-targets[c13] == 0 : next(?) & next(c13) = 0;
+TRUE : next(c13) = c13; esac
+|
+case c14 != 0 & routes[sources[13] - 1][c14] == 0 : next(routes[sources[13] - 1][c14]) = c14 & next(c14) = 0;
 TRUE : next(c14) = c14; esac
-| case c15 != 0 & routes[sources[14] - 1][c15] = 0 : next(routes[sources[14] - 1][c15]) = c15 & next(c15) = 0;
-c15 = targets[c15] : next(c15) = 0;
+|
+case c14 == targets[c14] : next(c14) = 0;
+TRUE : next(c14) = c14; esac
+|
+case c14 != 0 & targets[c14] != m & c-targets[c14] == 0 : next(?) & next(c14) = 0;
+TRUE : next(c14) = c14; esac
+|
+case c15 != 0 & routes[sources[14] - 1][c15] == 0 : next(routes[sources[14] - 1][c15]) = c15 & next(c15) = 0;
 TRUE : next(c15) = c15; esac
-| case c16 != 0 & routes[sources[15] - 1][c16] = 0 : next(routes[sources[15] - 1][c16]) = c16 & next(c16) = 0;
-c16 = targets[c16] : next(c16) = 0;
+|
+case c15 == targets[c15] : next(c15) = 0;
+TRUE : next(c15) = c15; esac
+|
+case c15 != 0 & targets[c15] != m & c-targets[c15] == 0 : next(?) & next(c15) = 0;
+TRUE : next(c15) = c15; esac
+|
+case c16 != 0 & routes[sources[15] - 1][c16] == 0 : next(routes[sources[15] - 1][c16]) = c16 & next(c16) = 0;
 TRUE : next(c16) = c16; esac
-| case c17 != 0 & routes[sources[16] - 1][c17] = 0 : next(routes[sources[16] - 1][c17]) = c17 & next(c17) = 0;
-c17 = targets[c17] : next(c17) = 0;
+|
+case c16 == targets[c16] : next(c16) = 0;
+TRUE : next(c16) = c16; esac
+|
+case c16 != 0 & targets[c16] != m & c-targets[c16] == 0 : next(?) & next(c16) = 0;
+TRUE : next(c16) = c16; esac
+|
+case c17 != 0 & routes[sources[16] - 1][c17] == 0 : next(routes[sources[16] - 1][c17]) = c17 & next(c17) = 0;
 TRUE : next(c17) = c17; esac
-| case c18 != 0 & routes[sources[17] - 1][c18] = 0 : next(routes[sources[17] - 1][c18]) = c18 & next(c18) = 0;
-c18 = targets[c18] : next(c18) = 0;
+|
+case c17 == targets[c17] : next(c17) = 0;
+TRUE : next(c17) = c17; esac
+|
+case c17 != 0 & targets[c17] != m & c-targets[c17] == 0 : next(?) & next(c17) = 0;
+TRUE : next(c17) = c17; esac
+|
+case c18 != 0 & routes[sources[17] - 1][c18] == 0 : next(routes[sources[17] - 1][c18]) = c18 & next(c18) = 0;
 TRUE : next(c18) = c18; esac
-| case c19 != 0 & routes[sources[18] - 1][c19] = 0 : next(routes[sources[18] - 1][c19]) = c19 & next(c19) = 0;
-c19 = targets[c19] : next(c19) = 0;
+|
+case c18 == targets[c18] : next(c18) = 0;
+TRUE : next(c18) = c18; esac
+|
+case c18 != 0 & targets[c18] != m & c-targets[c18] == 0 : next(?) & next(c18) = 0;
+TRUE : next(c18) = c18; esac
+|
+case c19 != 0 & routes[sources[18] - 1][c19] == 0 : next(routes[sources[18] - 1][c19]) = c19 & next(c19) = 0;
 TRUE : next(c19) = c19; esac
-| case c20 != 0 & routes[sources[19] - 1][c20] = 0 : next(routes[sources[19] - 1][c20]) = c20 & next(c20) = 0;
-c20 = targets[c20] : next(c20) = 0;
+|
+case c19 == targets[c19] : next(c19) = 0;
+TRUE : next(c19) = c19; esac
+|
+case c19 != 0 & targets[c19] != m & c-targets[c19] == 0 : next(?) & next(c19) = 0;
+TRUE : next(c19) = c19; esac
+|
+case c20 != 0 & routes[sources[19] - 1][c20] == 0 : next(routes[sources[19] - 1][c20]) = c20 & next(c20) = 0;
 TRUE : next(c20) = c20; esac
-| case c21 != 0 & routes[sources[20] - 1][c21] = 0 : next(routes[sources[20] - 1][c21]) = c21 & next(c21) = 0;
-c21 = targets[c21] : next(c21) = 0;
+|
+case c20 == targets[c20] : next(c20) = 0;
+TRUE : next(c20) = c20; esac
+|
+case c20 != 0 & targets[c20] != m & c-targets[c20] == 0 : next(?) & next(c20) = 0;
+TRUE : next(c20) = c20; esac
+|
+case c21 != 0 & routes[sources[20] - 1][c21] == 0 : next(routes[sources[20] - 1][c21]) = c21 & next(c21) = 0;
 TRUE : next(c21) = c21; esac
-| case c22 != 0 & routes[sources[21] - 1][c22] = 0 : next(routes[sources[21] - 1][c22]) = c22 & next(c22) = 0;
-c22 = targets[c22] : next(c22) = 0;
+|
+case c21 == targets[c21] : next(c21) = 0;
+TRUE : next(c21) = c21; esac
+|
+case c21 != 0 & targets[c21] != m & c-targets[c21] == 0 : next(?) & next(c21) = 0;
+TRUE : next(c21) = c21; esac
+|
+case c22 != 0 & routes[sources[21] - 1][c22] == 0 : next(routes[sources[21] - 1][c22]) = c22 & next(c22) = 0;
 TRUE : next(c22) = c22; esac
-| case c23 != 0 & routes[sources[22] - 1][c23] = 0 : next(routes[sources[22] - 1][c23]) = c23 & next(c23) = 0;
-c23 = targets[c23] : next(c23) = 0;
+|
+case c22 == targets[c22] : next(c22) = 0;
+TRUE : next(c22) = c22; esac
+|
+case c22 != 0 & targets[c22] != m & c-targets[c22] == 0 : next(?) & next(c22) = 0;
+TRUE : next(c22) = c22; esac
+|
+case c23 != 0 & routes[sources[22] - 1][c23] == 0 : next(routes[sources[22] - 1][c23]) = c23 & next(c23) = 0;
 TRUE : next(c23) = c23; esac
-| case c24 != 0 & routes[sources[23] - 1][c24] = 0 : next(routes[sources[23] - 1][c24]) = c24 & next(c24) = 0;
-c24 = targets[c24] : next(c24) = 0;
+|
+case c23 == targets[c23] : next(c23) = 0;
+TRUE : next(c23) = c23; esac
+|
+case c23 != 0 & targets[c23] != m & c-targets[c23] == 0 : next(?) & next(c23) = 0;
+TRUE : next(c23) = c23; esac
+|
+case c24 != 0 & routes[sources[23] - 1][c24] == 0 : next(routes[sources[23] - 1][c24]) = c24 & next(c24) = 0;
 TRUE : next(c24) = c24; esac
-| case c25 != 0 & routes[sources[24] - 1][c25] = 0 : next(routes[sources[24] - 1][c25]) = c25 & next(c25) = 0;
-c25 = targets[c25] : next(c25) = 0;
+|
+case c24 == targets[c24] : next(c24) = 0;
+TRUE : next(c24) = c24; esac
+|
+case c24 != 0 & targets[c24] != m & c-targets[c24] == 0 : next(?) & next(c24) = 0;
+TRUE : next(c24) = c24; esac
+|
+case c25 != 0 & routes[sources[24] - 1][c25] == 0 : next(routes[sources[24] - 1][c25]) = c25 & next(c25) = 0;
 TRUE : next(c25) = c25; esac
-| case c26 != 0 & routes[sources[25] - 1][c26] = 0 : next(routes[sources[25] - 1][c26]) = c26 & next(c26) = 0;
-c26 = targets[c26] : next(c26) = 0;
+|
+case c25 == targets[c25] : next(c25) = 0;
+TRUE : next(c25) = c25; esac
+|
+case c25 != 0 & targets[c25] != m & c-targets[c25] == 0 : next(?) & next(c25) = 0;
+TRUE : next(c25) = c25; esac
+|
+case c26 != 0 & routes[sources[25] - 1][c26] == 0 : next(routes[sources[25] - 1][c26]) = c26 & next(c26) = 0;
 TRUE : next(c26) = c26; esac
-| case c27 != 0 & routes[sources[26] - 1][c27] = 0 : next(routes[sources[26] - 1][c27]) = c27 & next(c27) = 0;
-c27 = targets[c27] : next(c27) = 0;
+|
+case c26 == targets[c26] : next(c26) = 0;
+TRUE : next(c26) = c26; esac
+|
+case c26 != 0 & targets[c26] != m & c-targets[c26] == 0 : next(?) & next(c26) = 0;
+TRUE : next(c26) = c26; esac
+|
+case c27 != 0 & routes[sources[26] - 1][c27] == 0 : next(routes[sources[26] - 1][c27]) = c27 & next(c27) = 0;
+TRUE : next(c27) = c27; esac
+|
+case c27 == targets[c27] : next(c27) = 0;
+TRUE : next(c27) = c27; esac
+|
+case c27 != 0 & targets[c27] != m & c-targets[c27] == 0 : next(?) & next(c27) = 0;
 TRUE : next(c27) = c27; esac

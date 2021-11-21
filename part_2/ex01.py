@@ -16,7 +16,7 @@ smv_file.write('VAR\n')
 for i in range (1, NR_OF_CHANNELS+1):
     smv_file.write(f'c{i} : 0..{NR_OF_NODES-1};\n')
 
-smv_file.write(f'm : {{ {", ".join(map(str, M))} }};\n')
+smv_file.write(f'm := [{ ", ".join(map(str, M)) }];\n')
 
 smv_file.write('DEFINE sources := [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 3, 17, 7, 17, 11, 17, 15, 17, 16, 4, 8];\n')
 smv_file.write('DEFINE targets := [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 17, 3, 17, 7, 17, 11, 17, 15, 2, 6, 10];\n')
@@ -47,18 +47,39 @@ for i in range (1, NR_OF_CHANNELS+1):
 
 smv_file.write('TRANS\n')
 
-delim = ''
+#delim = ''
+delim = '|'
 
 for i in range (1, NR_OF_CHANNELS+1):
-    if i == 2:
-        delim = '|' 
+    #if i == 2:
+    #    delim = '|' 
+    #
+
+    if i > 1:
+        # The disjunction between the 3 steps
+        smv_file.write(f'{delim}\n')
 
     # Send step
-    smv_file.write(f'{delim} case c{i} != 0 & routes[sources[{i-1}] - 1][c{i}] = 0 : next(routes[sources[{i-1}] - 1][c{i}]) = c{i} & next(c{i}) = 0;\n')
-    # Receive step
-    smv_file.write(f'c{i} = targets[c{i}] : next(c{i}) = 0;\n')
-    # TODO: Process step
-    # [Insert process step here]
+    smv_file.write(f'case c{i} != 0 & routes[sources[{i-1}] - 1][c{i}] == 0 : next(routes[sources[{i-1}] - 1][c{i}]) = c{i} & next(c{i}) = 0;\n')
     # Else it stays the same (for now)
     smv_file.write(f'TRUE : next(c{i}) = c{i}; esac\n')
-    
+
+    # The disjunction between the 3 steps
+    smv_file.write(f'{delim}\n')
+
+    # Receive step
+    smv_file.write(f'case c{i} == targets[c{i}] : next(c{i}) = 0;\n')
+    # Else it stays the same (for now)
+    smv_file.write(f'TRUE : next(c{i}) = c{i}; esac\n')
+
+    # The disjunction between the 3 steps
+    smv_file.write(f'{delim}\n')
+
+    # TODO: Process step
+    # [Insert process step here]
+    # TODO: - check if target is element of m (which is now a list of integers instead of enumeration),
+    #       - check if c value of the target from the current channel is equal to 0 (free)
+    #       - take into account the rout function to be sure of the shortest path
+    smv_file.write(f'case c{i} != 0 & targets[c{i}] != m & c-targets[c{i}] == 0 : next(?) & next(c{i}) = 0;\n')
+    # Else it stays the same (for now)
+    smv_file.write(f'TRUE : next(c{i}) = c{i}; esac\n')
