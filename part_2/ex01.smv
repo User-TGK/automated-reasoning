@@ -1,323 +1,552 @@
 
 MODULE main
 VAR
-c1 : 0..16;
-c2 : 0..16;
-c3 : 0..16;
-c4 : 0..16;
-c5 : 0..16;
-c6 : 0..16;
-c7 : 0..16;
-c8 : 0..16;
-c9 : 0..16;
-c10 : 0..16;
-c11 : 0..16;
-c12 : 0..16;
-c13 : 0..16;
-c14 : 0..16;
-c15 : 0..16;
-c16 : 0..16;
-c17 : 0..16;
-c18 : 0..16;
-c19 : 0..16;
-c20 : 0..16;
-c21 : 0..16;
-c22 : 0..16;
-c23 : 0..16;
-c24 : 0..16;
-c25 : 0..16;
-c26 : 0..16;
-c27 : 0..16;
-m := [1, 5, 9, 13];
-DEFINE sources := [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 3, 17, 7, 17, 11, 17, 15, 17, 16, 4, 8];
-DEFINE targets := [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 17, 3, 17, 7, 17, 11, 17, 15, 2, 6, 10];
-DEFINE routes := [
-    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-    [17, 17, 0, 3, 3, 3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17],
-    [26, 26, 26, 0, 4, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26],
-    [5, 5, 5, 5, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-    [6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-    [19, 19, 19, 19, 19, 19, 0, 7, 7, 7, 19, 19, 19, 19, 19, 19, 19],
-    [27, 27, 27, 27, 27, 27, 27, 0, 8, 27, 27, 27, 27, 27, 27, 27, 27],
-    [9, 9, 9, 9, 9, 9, 9, 9, 0, 9, 9, 9, 9, 9, 9, 9, 9],
-    [10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 10, 10, 10, 10, 10, 10],
-    [21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 0, 11, 11, 11, 21, 21, 21],
-    [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 0, 12, 12, 12, 12, 12],
-    [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 0, 13, 13, 13, 13],
-    [14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 0, 14, 14, 14],
-    [15, 15, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 0, 15, 23],
-    [16, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 0, 25],
-    [24, 24, 18, 18, 18, 18, 20, 20, 20, 20, 22, 22, 22, 22, 24, 24, 0]
-];
+channels : array 1 ..27 of 0..17;
+sources : array 1 ..27 of 1..17;
+targets : array 1 ..27 of 1..17;
+routes : array 1..17 of array 1..17 of 0..27;
+D : boolean;
 ASSIGN
-init(c1) := 0;
-init(c2) := 0;
-init(c3) := 0;
-init(c4) := 0;
-init(c5) := 0;
-init(c6) := 0;
-init(c7) := 0;
-init(c8) := 0;
-init(c9) := 0;
-init(c10) := 0;
-init(c11) := 0;
-init(c12) := 0;
-init(c13) := 0;
-init(c14) := 0;
-init(c15) := 0;
-init(c16) := 0;
-init(c17) := 0;
-init(c18) := 0;
-init(c19) := 0;
-init(c20) := 0;
-init(c21) := 0;
-init(c22) := 0;
-init(c23) := 0;
-init(c24) := 0;
-init(c25) := 0;
-init(c26) := 0;
-init(c27) := 0;
+init(channels[1]) := 0;
+init(channels[2]) := 0;
+init(channels[3]) := 0;
+init(channels[4]) := 0;
+init(channels[5]) := 0;
+init(channels[6]) := 0;
+init(channels[7]) := 0;
+init(channels[8]) := 0;
+init(channels[9]) := 0;
+init(channels[10]) := 0;
+init(channels[11]) := 0;
+init(channels[12]) := 0;
+init(channels[13]) := 0;
+init(channels[14]) := 0;
+init(channels[15]) := 0;
+init(channels[16]) := 0;
+init(channels[17]) := 0;
+init(channels[18]) := 0;
+init(channels[19]) := 0;
+init(channels[20]) := 0;
+init(channels[21]) := 0;
+init(channels[22]) := 0;
+init(channels[23]) := 0;
+init(channels[24]) := 0;
+init(channels[25]) := 0;
+init(channels[26]) := 0;
+init(channels[27]) := 0;
+init(sources[1]) := 1;
+init(targets[1]) := 2;
+init(sources[2]) := 2;
+init(targets[2]) := 3;
+init(sources[3]) := 3;
+init(targets[3]) := 4;
+init(sources[4]) := 4;
+init(targets[4]) := 5;
+init(sources[5]) := 5;
+init(targets[5]) := 6;
+init(sources[6]) := 6;
+init(targets[6]) := 7;
+init(sources[7]) := 7;
+init(targets[7]) := 8;
+init(sources[8]) := 8;
+init(targets[8]) := 9;
+init(sources[9]) := 9;
+init(targets[9]) := 10;
+init(sources[10]) := 10;
+init(targets[10]) := 11;
+init(sources[11]) := 11;
+init(targets[11]) := 12;
+init(sources[12]) := 12;
+init(targets[12]) := 13;
+init(sources[13]) := 13;
+init(targets[13]) := 14;
+init(sources[14]) := 14;
+init(targets[14]) := 15;
+init(sources[15]) := 15;
+init(targets[15]) := 16;
+init(sources[16]) := 16;
+init(targets[16]) := 1;
+init(sources[17]) := 3;
+init(targets[17]) := 17;
+init(sources[18]) := 17;
+init(targets[18]) := 3;
+init(sources[19]) := 7;
+init(targets[19]) := 17;
+init(sources[20]) := 17;
+init(targets[20]) := 7;
+init(sources[21]) := 11;
+init(targets[21]) := 17;
+init(sources[22]) := 17;
+init(targets[22]) := 11;
+init(sources[23]) := 15;
+init(targets[23]) := 17;
+init(sources[24]) := 17;
+init(targets[24]) := 15;
+init(sources[25]) := 16;
+init(targets[25]) := 2;
+init(sources[26]) := 4;
+init(targets[26]) := 6;
+init(sources[27]) := 8;
+init(targets[27]) := 10;
+init(routes[1][1]) := 0;
+init(routes[1][2]) := 1;
+init(routes[1][3]) := 1;
+init(routes[1][4]) := 1;
+init(routes[1][5]) := 1;
+init(routes[1][6]) := 1;
+init(routes[1][7]) := 1;
+init(routes[1][8]) := 1;
+init(routes[1][9]) := 1;
+init(routes[1][10]) := 1;
+init(routes[1][11]) := 1;
+init(routes[1][12]) := 1;
+init(routes[1][13]) := 1;
+init(routes[1][14]) := 1;
+init(routes[1][15]) := 1;
+init(routes[1][16]) := 1;
+init(routes[1][17]) := 1;
+init(routes[2][1]) := 2;
+init(routes[2][2]) := 0;
+init(routes[2][3]) := 2;
+init(routes[2][4]) := 2;
+init(routes[2][5]) := 2;
+init(routes[2][6]) := 2;
+init(routes[2][7]) := 2;
+init(routes[2][8]) := 2;
+init(routes[2][9]) := 2;
+init(routes[2][10]) := 2;
+init(routes[2][11]) := 2;
+init(routes[2][12]) := 2;
+init(routes[2][13]) := 2;
+init(routes[2][14]) := 2;
+init(routes[2][15]) := 2;
+init(routes[2][16]) := 2;
+init(routes[2][17]) := 2;
+init(routes[3][1]) := 17;
+init(routes[3][2]) := 17;
+init(routes[3][3]) := 0;
+init(routes[3][4]) := 3;
+init(routes[3][5]) := 3;
+init(routes[3][6]) := 3;
+init(routes[3][7]) := 17;
+init(routes[3][8]) := 17;
+init(routes[3][9]) := 17;
+init(routes[3][10]) := 17;
+init(routes[3][11]) := 17;
+init(routes[3][12]) := 17;
+init(routes[3][13]) := 17;
+init(routes[3][14]) := 17;
+init(routes[3][15]) := 17;
+init(routes[3][16]) := 17;
+init(routes[3][17]) := 17;
+init(routes[4][1]) := 26;
+init(routes[4][2]) := 26;
+init(routes[4][3]) := 26;
+init(routes[4][4]) := 0;
+init(routes[4][5]) := 4;
+init(routes[4][6]) := 26;
+init(routes[4][7]) := 26;
+init(routes[4][8]) := 26;
+init(routes[4][9]) := 26;
+init(routes[4][10]) := 26;
+init(routes[4][11]) := 26;
+init(routes[4][12]) := 26;
+init(routes[4][13]) := 26;
+init(routes[4][14]) := 26;
+init(routes[4][15]) := 26;
+init(routes[4][16]) := 26;
+init(routes[4][17]) := 26;
+init(routes[5][1]) := 5;
+init(routes[5][2]) := 5;
+init(routes[5][3]) := 5;
+init(routes[5][4]) := 5;
+init(routes[5][5]) := 0;
+init(routes[5][6]) := 5;
+init(routes[5][7]) := 5;
+init(routes[5][8]) := 5;
+init(routes[5][9]) := 5;
+init(routes[5][10]) := 5;
+init(routes[5][11]) := 5;
+init(routes[5][12]) := 5;
+init(routes[5][13]) := 5;
+init(routes[5][14]) := 5;
+init(routes[5][15]) := 5;
+init(routes[5][16]) := 5;
+init(routes[5][17]) := 5;
+init(routes[6][1]) := 6;
+init(routes[6][2]) := 6;
+init(routes[6][3]) := 6;
+init(routes[6][4]) := 6;
+init(routes[6][5]) := 6;
+init(routes[6][6]) := 0;
+init(routes[6][7]) := 6;
+init(routes[6][8]) := 6;
+init(routes[6][9]) := 6;
+init(routes[6][10]) := 6;
+init(routes[6][11]) := 6;
+init(routes[6][12]) := 6;
+init(routes[6][13]) := 6;
+init(routes[6][14]) := 6;
+init(routes[6][15]) := 6;
+init(routes[6][16]) := 6;
+init(routes[6][17]) := 6;
+init(routes[7][1]) := 19;
+init(routes[7][2]) := 19;
+init(routes[7][3]) := 19;
+init(routes[7][4]) := 19;
+init(routes[7][5]) := 19;
+init(routes[7][6]) := 19;
+init(routes[7][7]) := 0;
+init(routes[7][8]) := 7;
+init(routes[7][9]) := 7;
+init(routes[7][10]) := 7;
+init(routes[7][11]) := 19;
+init(routes[7][12]) := 19;
+init(routes[7][13]) := 19;
+init(routes[7][14]) := 19;
+init(routes[7][15]) := 19;
+init(routes[7][16]) := 19;
+init(routes[7][17]) := 19;
+init(routes[8][1]) := 27;
+init(routes[8][2]) := 27;
+init(routes[8][3]) := 27;
+init(routes[8][4]) := 27;
+init(routes[8][5]) := 27;
+init(routes[8][6]) := 27;
+init(routes[8][7]) := 27;
+init(routes[8][8]) := 0;
+init(routes[8][9]) := 8;
+init(routes[8][10]) := 27;
+init(routes[8][11]) := 27;
+init(routes[8][12]) := 27;
+init(routes[8][13]) := 27;
+init(routes[8][14]) := 27;
+init(routes[8][15]) := 27;
+init(routes[8][16]) := 27;
+init(routes[8][17]) := 27;
+init(routes[9][1]) := 9;
+init(routes[9][2]) := 9;
+init(routes[9][3]) := 9;
+init(routes[9][4]) := 9;
+init(routes[9][5]) := 9;
+init(routes[9][6]) := 9;
+init(routes[9][7]) := 9;
+init(routes[9][8]) := 9;
+init(routes[9][9]) := 0;
+init(routes[9][10]) := 9;
+init(routes[9][11]) := 9;
+init(routes[9][12]) := 9;
+init(routes[9][13]) := 9;
+init(routes[9][14]) := 9;
+init(routes[9][15]) := 9;
+init(routes[9][16]) := 9;
+init(routes[9][17]) := 9;
+init(routes[10][1]) := 10;
+init(routes[10][2]) := 10;
+init(routes[10][3]) := 10;
+init(routes[10][4]) := 10;
+init(routes[10][5]) := 10;
+init(routes[10][6]) := 10;
+init(routes[10][7]) := 10;
+init(routes[10][8]) := 10;
+init(routes[10][9]) := 10;
+init(routes[10][10]) := 0;
+init(routes[10][11]) := 10;
+init(routes[10][12]) := 10;
+init(routes[10][13]) := 10;
+init(routes[10][14]) := 10;
+init(routes[10][15]) := 10;
+init(routes[10][16]) := 10;
+init(routes[10][17]) := 10;
+init(routes[11][1]) := 21;
+init(routes[11][2]) := 21;
+init(routes[11][3]) := 21;
+init(routes[11][4]) := 21;
+init(routes[11][5]) := 21;
+init(routes[11][6]) := 21;
+init(routes[11][7]) := 21;
+init(routes[11][8]) := 21;
+init(routes[11][9]) := 21;
+init(routes[11][10]) := 21;
+init(routes[11][11]) := 0;
+init(routes[11][12]) := 11;
+init(routes[11][13]) := 11;
+init(routes[11][14]) := 11;
+init(routes[11][15]) := 21;
+init(routes[11][16]) := 21;
+init(routes[11][17]) := 21;
+init(routes[12][1]) := 12;
+init(routes[12][2]) := 12;
+init(routes[12][3]) := 12;
+init(routes[12][4]) := 12;
+init(routes[12][5]) := 12;
+init(routes[12][6]) := 12;
+init(routes[12][7]) := 12;
+init(routes[12][8]) := 12;
+init(routes[12][9]) := 12;
+init(routes[12][10]) := 12;
+init(routes[12][11]) := 12;
+init(routes[12][12]) := 0;
+init(routes[12][13]) := 12;
+init(routes[12][14]) := 12;
+init(routes[12][15]) := 12;
+init(routes[12][16]) := 12;
+init(routes[12][17]) := 12;
+init(routes[13][1]) := 13;
+init(routes[13][2]) := 13;
+init(routes[13][3]) := 13;
+init(routes[13][4]) := 13;
+init(routes[13][5]) := 13;
+init(routes[13][6]) := 13;
+init(routes[13][7]) := 13;
+init(routes[13][8]) := 13;
+init(routes[13][9]) := 13;
+init(routes[13][10]) := 13;
+init(routes[13][11]) := 13;
+init(routes[13][12]) := 13;
+init(routes[13][13]) := 0;
+init(routes[13][14]) := 13;
+init(routes[13][15]) := 13;
+init(routes[13][16]) := 13;
+init(routes[13][17]) := 13;
+init(routes[14][1]) := 14;
+init(routes[14][2]) := 14;
+init(routes[14][3]) := 14;
+init(routes[14][4]) := 14;
+init(routes[14][5]) := 14;
+init(routes[14][6]) := 14;
+init(routes[14][7]) := 14;
+init(routes[14][8]) := 14;
+init(routes[14][9]) := 14;
+init(routes[14][10]) := 14;
+init(routes[14][11]) := 14;
+init(routes[14][12]) := 14;
+init(routes[14][13]) := 14;
+init(routes[14][14]) := 0;
+init(routes[14][15]) := 14;
+init(routes[14][16]) := 14;
+init(routes[14][17]) := 14;
+init(routes[15][1]) := 15;
+init(routes[15][2]) := 15;
+init(routes[15][3]) := 23;
+init(routes[15][4]) := 23;
+init(routes[15][5]) := 23;
+init(routes[15][6]) := 23;
+init(routes[15][7]) := 23;
+init(routes[15][8]) := 23;
+init(routes[15][9]) := 23;
+init(routes[15][10]) := 23;
+init(routes[15][11]) := 23;
+init(routes[15][12]) := 23;
+init(routes[15][13]) := 23;
+init(routes[15][14]) := 23;
+init(routes[15][15]) := 0;
+init(routes[15][16]) := 15;
+init(routes[15][17]) := 23;
+init(routes[16][1]) := 16;
+init(routes[16][2]) := 25;
+init(routes[16][3]) := 25;
+init(routes[16][4]) := 25;
+init(routes[16][5]) := 25;
+init(routes[16][6]) := 25;
+init(routes[16][7]) := 25;
+init(routes[16][8]) := 25;
+init(routes[16][9]) := 25;
+init(routes[16][10]) := 25;
+init(routes[16][11]) := 25;
+init(routes[16][12]) := 25;
+init(routes[16][13]) := 25;
+init(routes[16][14]) := 25;
+init(routes[16][15]) := 25;
+init(routes[16][16]) := 0;
+init(routes[16][17]) := 25;
+init(routes[17][1]) := 24;
+init(routes[17][2]) := 24;
+init(routes[17][3]) := 18;
+init(routes[17][4]) := 18;
+init(routes[17][5]) := 18;
+init(routes[17][6]) := 18;
+init(routes[17][7]) := 20;
+init(routes[17][8]) := 20;
+init(routes[17][9]) := 20;
+init(routes[17][10]) := 20;
+init(routes[17][11]) := 22;
+init(routes[17][12]) := 22;
+init(routes[17][13]) := 22;
+init(routes[17][14]) := 22;
+init(routes[17][15]) := 24;
+init(routes[17][16]) := 24;
+init(routes[17][17]) := 0;
+init(D) := FALSE;
 TRANS
-case c1 != 0 & routes[sources[0] - 1][c1] == 0 : next(routes[sources[0] - 1][c1]) = c1 & next(c1) = 0;
-TRUE : next(c1) = c1; esac
+case channels[1] = targets[1] : next(channels[1]) = 0;
+channels[1] != 0 & channels[1] != targets[1] & channels[routes[targets[1]][channels[1]]] = 0 : next(channels[routes[targets[1]][channels[1]]]) = channels[1] & next(channels[1]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
+|
+case channels[2] = targets[2] : next(channels[2]) = 0;
+channels[2] != 0 & channels[2] != targets[2] & channels[routes[targets[2]][channels[2]]] = 0 : next(channels[routes[targets[2]][channels[2]]]) = channels[2] & next(channels[2]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
+|
+case channels[3] = targets[3] : next(channels[3]) = 0;
+channels[3] != 0 & channels[3] != targets[3] & channels[routes[targets[3]][channels[3]]] = 0 : next(channels[routes[targets[3]][channels[3]]]) = channels[3] & next(channels[3]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c1 == targets[c1] : next(c1) = 0;
-TRUE : next(c1) = c1; esac
+case channels[4] = targets[4] : next(channels[4]) = 0;
+channels[4] != 0 & channels[4] != targets[4] & channels[routes[targets[4]][channels[4]]] = 0 : next(channels[routes[targets[4]][channels[4]]]) = channels[4] & next(channels[4]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c1 != 0 & targets[c1] != m & c-targets[c1] == 0 : next(?) & next(c1) = 0;
-TRUE : next(c1) = c1; esac
+case channels[5] = targets[5] : next(channels[5]) = 0;
+channels[5] != 0 & channels[5] != targets[5] & channels[routes[targets[5]][channels[5]]] = 0 : next(channels[routes[targets[5]][channels[5]]]) = channels[5] & next(channels[5]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c2 != 0 & routes[sources[1] - 1][c2] == 0 : next(routes[sources[1] - 1][c2]) = c2 & next(c2) = 0;
-TRUE : next(c2) = c2; esac
+case channels[6] = targets[6] : next(channels[6]) = 0;
+channels[6] != 0 & channels[6] != targets[6] & channels[routes[targets[6]][channels[6]]] = 0 : next(channels[routes[targets[6]][channels[6]]]) = channels[6] & next(channels[6]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c2 == targets[c2] : next(c2) = 0;
-TRUE : next(c2) = c2; esac
+case channels[7] = targets[7] : next(channels[7]) = 0;
+channels[7] != 0 & channels[7] != targets[7] & channels[routes[targets[7]][channels[7]]] = 0 : next(channels[routes[targets[7]][channels[7]]]) = channels[7] & next(channels[7]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c2 != 0 & targets[c2] != m & c-targets[c2] == 0 : next(?) & next(c2) = 0;
-TRUE : next(c2) = c2; esac
+case channels[8] = targets[8] : next(channels[8]) = 0;
+channels[8] != 0 & channels[8] != targets[8] & channels[routes[targets[8]][channels[8]]] = 0 : next(channels[routes[targets[8]][channels[8]]]) = channels[8] & next(channels[8]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c3 != 0 & routes[sources[2] - 1][c3] == 0 : next(routes[sources[2] - 1][c3]) = c3 & next(c3) = 0;
-TRUE : next(c3) = c3; esac
+case channels[9] = targets[9] : next(channels[9]) = 0;
+channels[9] != 0 & channels[9] != targets[9] & channels[routes[targets[9]][channels[9]]] = 0 : next(channels[routes[targets[9]][channels[9]]]) = channels[9] & next(channels[9]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c3 == targets[c3] : next(c3) = 0;
-TRUE : next(c3) = c3; esac
+case channels[10] = targets[10] : next(channels[10]) = 0;
+channels[10] != 0 & channels[10] != targets[10] & channels[routes[targets[10]][channels[10]]] = 0 : next(channels[routes[targets[10]][channels[10]]]) = channels[10] & next(channels[10]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c3 != 0 & targets[c3] != m & c-targets[c3] == 0 : next(?) & next(c3) = 0;
-TRUE : next(c3) = c3; esac
+case channels[11] = targets[11] : next(channels[11]) = 0;
+channels[11] != 0 & channels[11] != targets[11] & channels[routes[targets[11]][channels[11]]] = 0 : next(channels[routes[targets[11]][channels[11]]]) = channels[11] & next(channels[11]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c4 != 0 & routes[sources[3] - 1][c4] == 0 : next(routes[sources[3] - 1][c4]) = c4 & next(c4) = 0;
-TRUE : next(c4) = c4; esac
+case channels[12] = targets[12] : next(channels[12]) = 0;
+channels[12] != 0 & channels[12] != targets[12] & channels[routes[targets[12]][channels[12]]] = 0 : next(channels[routes[targets[12]][channels[12]]]) = channels[12] & next(channels[12]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c4 == targets[c4] : next(c4) = 0;
-TRUE : next(c4) = c4; esac
+case channels[13] = targets[13] : next(channels[13]) = 0;
+channels[13] != 0 & channels[13] != targets[13] & channels[routes[targets[13]][channels[13]]] = 0 : next(channels[routes[targets[13]][channels[13]]]) = channels[13] & next(channels[13]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c4 != 0 & targets[c4] != m & c-targets[c4] == 0 : next(?) & next(c4) = 0;
-TRUE : next(c4) = c4; esac
+case channels[14] = targets[14] : next(channels[14]) = 0;
+channels[14] != 0 & channels[14] != targets[14] & channels[routes[targets[14]][channels[14]]] = 0 : next(channels[routes[targets[14]][channels[14]]]) = channels[14] & next(channels[14]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c5 != 0 & routes[sources[4] - 1][c5] == 0 : next(routes[sources[4] - 1][c5]) = c5 & next(c5) = 0;
-TRUE : next(c5) = c5; esac
+case channels[15] = targets[15] : next(channels[15]) = 0;
+channels[15] != 0 & channels[15] != targets[15] & channels[routes[targets[15]][channels[15]]] = 0 : next(channels[routes[targets[15]][channels[15]]]) = channels[15] & next(channels[15]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c5 == targets[c5] : next(c5) = 0;
-TRUE : next(c5) = c5; esac
+case channels[16] = targets[16] : next(channels[16]) = 0;
+channels[16] != 0 & channels[16] != targets[16] & channels[routes[targets[16]][channels[16]]] = 0 : next(channels[routes[targets[16]][channels[16]]]) = channels[16] & next(channels[16]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c5 != 0 & targets[c5] != m & c-targets[c5] == 0 : next(?) & next(c5) = 0;
-TRUE : next(c5) = c5; esac
+case channels[17] = targets[17] : next(channels[17]) = 0;
+channels[17] != 0 & channels[17] != targets[17] & channels[routes[targets[17]][channels[17]]] = 0 : next(channels[routes[targets[17]][channels[17]]]) = channels[17] & next(channels[17]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c6 != 0 & routes[sources[5] - 1][c6] == 0 : next(routes[sources[5] - 1][c6]) = c6 & next(c6) = 0;
-TRUE : next(c6) = c6; esac
+case channels[18] = targets[18] : next(channels[18]) = 0;
+channels[18] != 0 & channels[18] != targets[18] & channels[routes[targets[18]][channels[18]]] = 0 : next(channels[routes[targets[18]][channels[18]]]) = channels[18] & next(channels[18]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c6 == targets[c6] : next(c6) = 0;
-TRUE : next(c6) = c6; esac
+case channels[19] = targets[19] : next(channels[19]) = 0;
+channels[19] != 0 & channels[19] != targets[19] & channels[routes[targets[19]][channels[19]]] = 0 : next(channels[routes[targets[19]][channels[19]]]) = channels[19] & next(channels[19]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c6 != 0 & targets[c6] != m & c-targets[c6] == 0 : next(?) & next(c6) = 0;
-TRUE : next(c6) = c6; esac
+case channels[20] = targets[20] : next(channels[20]) = 0;
+channels[20] != 0 & channels[20] != targets[20] & channels[routes[targets[20]][channels[20]]] = 0 : next(channels[routes[targets[20]][channels[20]]]) = channels[20] & next(channels[20]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c7 != 0 & routes[sources[6] - 1][c7] == 0 : next(routes[sources[6] - 1][c7]) = c7 & next(c7) = 0;
-TRUE : next(c7) = c7; esac
+case channels[21] = targets[21] : next(channels[21]) = 0;
+channels[21] != 0 & channels[21] != targets[21] & channels[routes[targets[21]][channels[21]]] = 0 : next(channels[routes[targets[21]][channels[21]]]) = channels[21] & next(channels[21]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c7 == targets[c7] : next(c7) = 0;
-TRUE : next(c7) = c7; esac
+case channels[22] = targets[22] : next(channels[22]) = 0;
+channels[22] != 0 & channels[22] != targets[22] & channels[routes[targets[22]][channels[22]]] = 0 : next(channels[routes[targets[22]][channels[22]]]) = channels[22] & next(channels[22]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c7 != 0 & targets[c7] != m & c-targets[c7] == 0 : next(?) & next(c7) = 0;
-TRUE : next(c7) = c7; esac
+case channels[23] = targets[23] : next(channels[23]) = 0;
+channels[23] != 0 & channels[23] != targets[23] & channels[routes[targets[23]][channels[23]]] = 0 : next(channels[routes[targets[23]][channels[23]]]) = channels[23] & next(channels[23]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c8 != 0 & routes[sources[7] - 1][c8] == 0 : next(routes[sources[7] - 1][c8]) = c8 & next(c8) = 0;
-TRUE : next(c8) = c8; esac
+case channels[24] = targets[24] : next(channels[24]) = 0;
+channels[24] != 0 & channels[24] != targets[24] & channels[routes[targets[24]][channels[24]]] = 0 : next(channels[routes[targets[24]][channels[24]]]) = channels[24] & next(channels[24]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c8 == targets[c8] : next(c8) = 0;
-TRUE : next(c8) = c8; esac
+case channels[25] = targets[25] : next(channels[25]) = 0;
+channels[25] != 0 & channels[25] != targets[25] & channels[routes[targets[25]][channels[25]]] = 0 : next(channels[routes[targets[25]][channels[25]]]) = channels[25] & next(channels[25]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c8 != 0 & targets[c8] != m & c-targets[c8] == 0 : next(?) & next(c8) = 0;
-TRUE : next(c8) = c8; esac
+case channels[26] = targets[26] : next(channels[26]) = 0;
+channels[26] != 0 & channels[26] != targets[26] & channels[routes[targets[26]][channels[26]]] = 0 : next(channels[routes[targets[26]][channels[26]]]) = channels[26] & next(channels[26]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c9 != 0 & routes[sources[8] - 1][c9] == 0 : next(routes[sources[8] - 1][c9]) = c9 & next(c9) = 0;
-TRUE : next(c9) = c9; esac
+case channels[27] = targets[27] : next(channels[27]) = 0;
+channels[27] != 0 & channels[27] != targets[27] & channels[routes[targets[27]][channels[27]]] = 0 : next(channels[routes[targets[27]][channels[27]]]) = channels[27] & next(channels[27]) = 0;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c9 == targets[c9] : next(c9) = 0;
-TRUE : next(c9) = c9; esac
+case channels[routes[1][2]] = 0 : next(channels[routes[1][2]]) = 2;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c9 != 0 & targets[c9] != m & c-targets[c9] == 0 : next(?) & next(c9) = 0;
-TRUE : next(c9) = c9; esac
+case channels[routes[1][3]] = 0 : next(channels[routes[1][3]]) = 3;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c10 != 0 & routes[sources[9] - 1][c10] == 0 : next(routes[sources[9] - 1][c10]) = c10 & next(c10) = 0;
-TRUE : next(c10) = c10; esac
+case channels[routes[1][4]] = 0 : next(channels[routes[1][4]]) = 4;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c10 == targets[c10] : next(c10) = 0;
-TRUE : next(c10) = c10; esac
+case channels[routes[1][5]] = 0 : next(channels[routes[1][5]]) = 5;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c10 != 0 & targets[c10] != m & c-targets[c10] == 0 : next(?) & next(c10) = 0;
-TRUE : next(c10) = c10; esac
+case channels[routes[2][1]] = 0 : next(channels[routes[2][1]]) = 1;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c11 != 0 & routes[sources[10] - 1][c11] == 0 : next(routes[sources[10] - 1][c11]) = c11 & next(c11) = 0;
-TRUE : next(c11) = c11; esac
+case channels[routes[2][3]] = 0 : next(channels[routes[2][3]]) = 3;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c11 == targets[c11] : next(c11) = 0;
-TRUE : next(c11) = c11; esac
+case channels[routes[2][4]] = 0 : next(channels[routes[2][4]]) = 4;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c11 != 0 & targets[c11] != m & c-targets[c11] == 0 : next(?) & next(c11) = 0;
-TRUE : next(c11) = c11; esac
+case channels[routes[2][5]] = 0 : next(channels[routes[2][5]]) = 5;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c12 != 0 & routes[sources[11] - 1][c12] == 0 : next(routes[sources[11] - 1][c12]) = c12 & next(c12) = 0;
-TRUE : next(c12) = c12; esac
+case channels[routes[3][1]] = 0 : next(channels[routes[3][1]]) = 1;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c12 == targets[c12] : next(c12) = 0;
-TRUE : next(c12) = c12; esac
+case channels[routes[3][2]] = 0 : next(channels[routes[3][2]]) = 2;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c12 != 0 & targets[c12] != m & c-targets[c12] == 0 : next(?) & next(c12) = 0;
-TRUE : next(c12) = c12; esac
+case channels[routes[3][4]] = 0 : next(channels[routes[3][4]]) = 4;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c13 != 0 & routes[sources[12] - 1][c13] == 0 : next(routes[sources[12] - 1][c13]) = c13 & next(c13) = 0;
-TRUE : next(c13) = c13; esac
+case channels[routes[3][5]] = 0 : next(channels[routes[3][5]]) = 5;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c13 == targets[c13] : next(c13) = 0;
-TRUE : next(c13) = c13; esac
+case channels[routes[4][1]] = 0 : next(channels[routes[4][1]]) = 1;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c13 != 0 & targets[c13] != m & c-targets[c13] == 0 : next(?) & next(c13) = 0;
-TRUE : next(c13) = c13; esac
+case channels[routes[4][2]] = 0 : next(channels[routes[4][2]]) = 2;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c14 != 0 & routes[sources[13] - 1][c14] == 0 : next(routes[sources[13] - 1][c14]) = c14 & next(c14) = 0;
-TRUE : next(c14) = c14; esac
+case channels[routes[4][3]] = 0 : next(channels[routes[4][3]]) = 3;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c14 == targets[c14] : next(c14) = 0;
-TRUE : next(c14) = c14; esac
+case channels[routes[4][5]] = 0 : next(channels[routes[4][5]]) = 5;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c14 != 0 & targets[c14] != m & c-targets[c14] == 0 : next(?) & next(c14) = 0;
-TRUE : next(c14) = c14; esac
+case channels[routes[5][1]] = 0 : next(channels[routes[5][1]]) = 1;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c15 != 0 & routes[sources[14] - 1][c15] == 0 : next(routes[sources[14] - 1][c15]) = c15 & next(c15) = 0;
-TRUE : next(c15) = c15; esac
+case channels[routes[5][2]] = 0 : next(channels[routes[5][2]]) = 2;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c15 == targets[c15] : next(c15) = 0;
-TRUE : next(c15) = c15; esac
+case channels[routes[5][3]] = 0 : next(channels[routes[5][3]]) = 3;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c15 != 0 & targets[c15] != m & c-targets[c15] == 0 : next(?) & next(c15) = 0;
-TRUE : next(c15) = c15; esac
+case channels[routes[5][4]] = 0 : next(channels[routes[5][4]]) = 4;
+TRUE : next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac
 |
-case c16 != 0 & routes[sources[15] - 1][c16] == 0 : next(routes[sources[15] - 1][c16]) = c16 & next(c16) = 0;
-TRUE : next(c16) = c16; esac
-|
-case c16 == targets[c16] : next(c16) = 0;
-TRUE : next(c16) = c16; esac
-|
-case c16 != 0 & targets[c16] != m & c-targets[c16] == 0 : next(?) & next(c16) = 0;
-TRUE : next(c16) = c16; esac
-|
-case c17 != 0 & routes[sources[16] - 1][c17] == 0 : next(routes[sources[16] - 1][c17]) = c17 & next(c17) = 0;
-TRUE : next(c17) = c17; esac
-|
-case c17 == targets[c17] : next(c17) = 0;
-TRUE : next(c17) = c17; esac
-|
-case c17 != 0 & targets[c17] != m & c-targets[c17] == 0 : next(?) & next(c17) = 0;
-TRUE : next(c17) = c17; esac
-|
-case c18 != 0 & routes[sources[17] - 1][c18] == 0 : next(routes[sources[17] - 1][c18]) = c18 & next(c18) = 0;
-TRUE : next(c18) = c18; esac
-|
-case c18 == targets[c18] : next(c18) = 0;
-TRUE : next(c18) = c18; esac
-|
-case c18 != 0 & targets[c18] != m & c-targets[c18] == 0 : next(?) & next(c18) = 0;
-TRUE : next(c18) = c18; esac
-|
-case c19 != 0 & routes[sources[18] - 1][c19] == 0 : next(routes[sources[18] - 1][c19]) = c19 & next(c19) = 0;
-TRUE : next(c19) = c19; esac
-|
-case c19 == targets[c19] : next(c19) = 0;
-TRUE : next(c19) = c19; esac
-|
-case c19 != 0 & targets[c19] != m & c-targets[c19] == 0 : next(?) & next(c19) = 0;
-TRUE : next(c19) = c19; esac
-|
-case c20 != 0 & routes[sources[19] - 1][c20] == 0 : next(routes[sources[19] - 1][c20]) = c20 & next(c20) = 0;
-TRUE : next(c20) = c20; esac
-|
-case c20 == targets[c20] : next(c20) = 0;
-TRUE : next(c20) = c20; esac
-|
-case c20 != 0 & targets[c20] != m & c-targets[c20] == 0 : next(?) & next(c20) = 0;
-TRUE : next(c20) = c20; esac
-|
-case c21 != 0 & routes[sources[20] - 1][c21] == 0 : next(routes[sources[20] - 1][c21]) = c21 & next(c21) = 0;
-TRUE : next(c21) = c21; esac
-|
-case c21 == targets[c21] : next(c21) = 0;
-TRUE : next(c21) = c21; esac
-|
-case c21 != 0 & targets[c21] != m & c-targets[c21] == 0 : next(?) & next(c21) = 0;
-TRUE : next(c21) = c21; esac
-|
-case c22 != 0 & routes[sources[21] - 1][c22] == 0 : next(routes[sources[21] - 1][c22]) = c22 & next(c22) = 0;
-TRUE : next(c22) = c22; esac
-|
-case c22 == targets[c22] : next(c22) = 0;
-TRUE : next(c22) = c22; esac
-|
-case c22 != 0 & targets[c22] != m & c-targets[c22] == 0 : next(?) & next(c22) = 0;
-TRUE : next(c22) = c22; esac
-|
-case c23 != 0 & routes[sources[22] - 1][c23] == 0 : next(routes[sources[22] - 1][c23]) = c23 & next(c23) = 0;
-TRUE : next(c23) = c23; esac
-|
-case c23 == targets[c23] : next(c23) = 0;
-TRUE : next(c23) = c23; esac
-|
-case c23 != 0 & targets[c23] != m & c-targets[c23] == 0 : next(?) & next(c23) = 0;
-TRUE : next(c23) = c23; esac
-|
-case c24 != 0 & routes[sources[23] - 1][c24] == 0 : next(routes[sources[23] - 1][c24]) = c24 & next(c24) = 0;
-TRUE : next(c24) = c24; esac
-|
-case c24 == targets[c24] : next(c24) = 0;
-TRUE : next(c24) = c24; esac
-|
-case c24 != 0 & targets[c24] != m & c-targets[c24] == 0 : next(?) & next(c24) = 0;
-TRUE : next(c24) = c24; esac
-|
-case c25 != 0 & routes[sources[24] - 1][c25] == 0 : next(routes[sources[24] - 1][c25]) = c25 & next(c25) = 0;
-TRUE : next(c25) = c25; esac
-|
-case c25 == targets[c25] : next(c25) = 0;
-TRUE : next(c25) = c25; esac
-|
-case c25 != 0 & targets[c25] != m & c-targets[c25] == 0 : next(?) & next(c25) = 0;
-TRUE : next(c25) = c25; esac
-|
-case c26 != 0 & routes[sources[25] - 1][c26] == 0 : next(routes[sources[25] - 1][c26]) = c26 & next(c26) = 0;
-TRUE : next(c26) = c26; esac
-|
-case c26 == targets[c26] : next(c26) = 0;
-TRUE : next(c26) = c26; esac
-|
-case c26 != 0 & targets[c26] != m & c-targets[c26] == 0 : next(?) & next(c26) = 0;
-TRUE : next(c26) = c26; esac
-|
-case c27 != 0 & routes[sources[26] - 1][c27] == 0 : next(routes[sources[26] - 1][c27]) = c27 & next(c27) = 0;
-TRUE : next(c27) = c27; esac
-|
-case c27 == targets[c27] : next(c27) = 0;
-TRUE : next(c27) = c27; esac
-|
-case c27 != 0 & targets[c27] != m & c-targets[c27] == 0 : next(?) & next(c27) = 0;
-TRUE : next(c27) = c27; esac
+case !((channels[1] = targets[1]) | (channels[1] != 0 & channels[1] != targets[1] & channels[routes[targets[1]][channels[1]]] = 0) |(channels[2] = targets[2]) | (channels[2] != 0 & channels[2] != targets[2] & channels[routes[targets[2]][channels[2]]] = 0) |(channels[3] = targets[3]) | (channels[3] != 0 & channels[3] != targets[3] & channels[routes[targets[3]][channels[3]]] = 0) |(channels[4] = targets[4]) | (channels[4] != 0 & channels[4] != targets[4] & channels[routes[targets[4]][channels[4]]] = 0) |(channels[5] = targets[5]) | (channels[5] != 0 & channels[5] != targets[5] & channels[routes[targets[5]][channels[5]]] = 0) |(channels[6] = targets[6]) | (channels[6] != 0 & channels[6] != targets[6] & channels[routes[targets[6]][channels[6]]] = 0) |(channels[7] = targets[7]) | (channels[7] != 0 & channels[7] != targets[7] & channels[routes[targets[7]][channels[7]]] = 0) |(channels[8] = targets[8]) | (channels[8] != 0 & channels[8] != targets[8] & channels[routes[targets[8]][channels[8]]] = 0) |(channels[9] = targets[9]) | (channels[9] != 0 & channels[9] != targets[9] & channels[routes[targets[9]][channels[9]]] = 0) |(channels[10] = targets[10]) | (channels[10] != 0 & channels[10] != targets[10] & channels[routes[targets[10]][channels[10]]] = 0) |(channels[11] = targets[11]) | (channels[11] != 0 & channels[11] != targets[11] & channels[routes[targets[11]][channels[11]]] = 0) |(channels[12] = targets[12]) | (channels[12] != 0 & channels[12] != targets[12] & channels[routes[targets[12]][channels[12]]] = 0) |(channels[13] = targets[13]) | (channels[13] != 0 & channels[13] != targets[13] & channels[routes[targets[13]][channels[13]]] = 0) |(channels[14] = targets[14]) | (channels[14] != 0 & channels[14] != targets[14] & channels[routes[targets[14]][channels[14]]] = 0) |(channels[15] = targets[15]) | (channels[15] != 0 & channels[15] != targets[15] & channels[routes[targets[15]][channels[15]]] = 0) |(channels[16] = targets[16]) | (channels[16] != 0 & channels[16] != targets[16] & channels[routes[targets[16]][channels[16]]] = 0) |(channels[17] = targets[17]) | (channels[17] != 0 & channels[17] != targets[17] & channels[routes[targets[17]][channels[17]]] = 0) |(channels[18] = targets[18]) | (channels[18] != 0 & channels[18] != targets[18] & channels[routes[targets[18]][channels[18]]] = 0) |(channels[19] = targets[19]) | (channels[19] != 0 & channels[19] != targets[19] & channels[routes[targets[19]][channels[19]]] = 0) |(channels[20] = targets[20]) | (channels[20] != 0 & channels[20] != targets[20] & channels[routes[targets[20]][channels[20]]] = 0) |(channels[21] = targets[21]) | (channels[21] != 0 & channels[21] != targets[21] & channels[routes[targets[21]][channels[21]]] = 0) |(channels[22] = targets[22]) | (channels[22] != 0 & channels[22] != targets[22] & channels[routes[targets[22]][channels[22]]] = 0) |(channels[23] = targets[23]) | (channels[23] != 0 & channels[23] != targets[23] & channels[routes[targets[23]][channels[23]]] = 0) |(channels[24] = targets[24]) | (channels[24] != 0 & channels[24] != targets[24] & channels[routes[targets[24]][channels[24]]] = 0) |(channels[25] = targets[25]) | (channels[25] != 0 & channels[25] != targets[25] & channels[routes[targets[25]][channels[25]]] = 0) |(channels[26] = targets[26]) | (channels[26] != 0 & channels[26] != targets[26] & channels[routes[targets[26]][channels[26]]] = 0) |(channels[27] = targets[27]) | (channels[27] != 0 & channels[27] != targets[27] & channels[routes[targets[27]][channels[27]]] = 0) |channels[routes[1][2]] = 0 | channels[routes[1][3]] = 0 | channels[routes[1][4]] = 0 | channels[routes[1][5]] = 0 | channels[routes[2][1]] = 0 | channels[routes[2][3]] = 0 | channels[routes[2][4]] = 0 | channels[routes[2][5]] = 0 | channels[routes[3][1]] = 0 | channels[routes[3][2]] = 0 | channels[routes[3][4]] = 0 | channels[routes[3][5]] = 0 | channels[routes[4][1]] = 0 | channels[routes[4][2]] = 0 | channels[routes[4][3]] = 0 | channels[routes[4][5]] = 0 | channels[routes[5][1]] = 0 | channels[routes[5][2]] = 0 | channels[routes[5][3]] = 0 | channels[routes[5][4]] = 0 ) : next(D) = TRUE;
+TRUE : next(D) = D & next(channels[1]) = channels[1] & next(channels[2]) = channels[2] & next(channels[3]) = channels[3] & next(channels[4]) = channels[4] & next(channels[5]) = channels[5] & next(channels[6]) = channels[6] & next(channels[7]) = channels[7] & next(channels[8]) = channels[8] & next(channels[9]) = channels[9] & next(channels[10]) = channels[10] & next(channels[11]) = channels[11] & next(channels[12]) = channels[12] & next(channels[13]) = channels[13] & next(channels[14]) = channels[14] & next(channels[15]) = channels[15] & next(channels[16]) = channels[16] & next(channels[17]) = channels[17] & next(channels[18]) = channels[18] & next(channels[19]) = channels[19] & next(channels[20]) = channels[20] & next(channels[21]) = channels[21] & next(channels[22]) = channels[22] & next(channels[23]) = channels[23] & next(channels[24]) = channels[24] & next(channels[25]) = channels[25] & next(channels[26]) = channels[26] & next(channels[27]) = channels[27] ; esac;
+LTLSPEC !F (D)

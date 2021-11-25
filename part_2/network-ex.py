@@ -1,48 +1,35 @@
 from typing import Final
 
 # State space is defined as NR_OF_NODES^NR_OF_CHANNELS
-NR_OF_CHANNELS: Final = 27
-NR_OF_NODES: Final = 17
+NR_OF_CHANNELS: Final = 4
+NR_OF_NODES: Final = 4
 
 # SOURCES[0] is the source m of channel 1
-SOURCES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 3, 17, 7, 17, 11, 17, 15, 17, 16, 4, 8]
+SOURCES = [1, 2, 3, 4]
 
 # TARGETS [0] is the target m of channel 1
-TARGETS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 1, 17, 3, 17, 7, 17, 11, 17, 15, 2, 6, 10]
+TARGETS = [2, 3, 4, 1]
 
 # ROUTES[0][1] is the channel you have to take if you want to go from node 1 to node 2
 ROUTES = [
-            [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-            [17, 17, 0, 3, 3, 3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17],
-            [26, 26, 26, 0, 4, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26],
-            [5, 5, 5, 5, 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-            [6, 6, 6, 6, 6, 0, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-            [19, 19, 19, 19, 19, 19, 0, 7, 7, 7, 19, 19, 19, 19, 19, 19, 19],
-            [27, 27, 27, 27, 27, 27, 27, 0, 8, 27, 27, 27, 27, 27, 27, 27, 27],
-            [9, 9, 9, 9, 9, 9, 9, 9, 0, 9, 9, 9, 9, 9, 9, 9, 9],
-            [10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 10, 10, 10, 10, 10, 10, 10],
-            [21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 0, 11, 11, 11, 21, 21, 21],
-            [12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 0, 12, 12, 12, 12, 12],
-            [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 0, 13, 13, 13, 13],
-            [14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 0, 14, 14, 14],
-            [15, 15, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 0, 15, 23],
-            [16, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 0, 25],
-            [24, 24, 18, 18, 18, 18, 20, 20, 20, 20, 22, 22, 22, 22, 24, 24, 0]
+            [0, 1, 1, 1],
+            [2, 0, 2, 2],
+            [3, 3, 0, 3],
+            [4, 4, 4, 0]
         ]
 
-M: Final = [1, 5, 9, 13]
+M: Final = [1, 2, 3, 4]
 
-FILE_NAME: Final = 'ex01.smv'
+FILE_NAME: Final = 'networkex.smv'
 
 smv_file = open(FILE_NAME, 'w')
 
 smv_file.write('\nMODULE main\n')
 smv_file.write('VAR\n')
 
-smv_file.write(f'channels : array 1 ..{NR_OF_CHANNELS} of 0..{NR_OF_NODES};\n')
-smv_file.write(f'sources : array 1 ..{NR_OF_CHANNELS} of 1..{NR_OF_NODES};\n')
-smv_file.write(f'targets : array 1 ..{NR_OF_CHANNELS} of 1..{NR_OF_NODES};\n')
+smv_file.write(f'channels : array 0..{NR_OF_CHANNELS} of 0..{NR_OF_NODES};\n')
+smv_file.write(f'sources : array 1..{NR_OF_CHANNELS} of 1..{NR_OF_NODES};\n')
+smv_file.write(f'targets : array 1..{NR_OF_CHANNELS} of 1..{NR_OF_NODES};\n')
 smv_file.write(f'routes : array 1..{NR_OF_NODES} of array 1..{NR_OF_NODES} of 0..{NR_OF_CHANNELS};\n');
 smv_file.write(f'D : boolean;\n')
 
@@ -81,7 +68,7 @@ for i in range (0, NR_OF_CHANNELS):
 
     channel_index = i + 1
     receive_check = f'channels[{channel_index}] = targets[{channel_index}]'
-    process_check = f'channels[{channel_index}] != 0 & channels[{channel_index}] != targets[{channel_index}] & channels[routes[targets[{channel_index}]][channels[{channel_index}]]] = 0'
+    process_check = f'channels[{channel_index}] != 0 & channels[{channel_index}] != targets[{channel_index}] & routes[targets[{channel_index}]][channels[{channel_index}]] != 0 & channels[routes[targets[{channel_index}]][channels[{channel_index}]]] = 0'
 
     # Receive step
     smv_file.write(f'case {receive_check} : next(channels[{channel_index}]) = 0;\n')

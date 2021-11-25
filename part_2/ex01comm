@@ -1,0 +1,3 @@
+go msat
+msat check ltlspec bmc -k 20
+quit
