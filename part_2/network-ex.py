@@ -27,71 +27,59 @@ smv_file = open(FILE_NAME, 'w')
 smv_file.write('\nMODULE main\n')
 smv_file.write('VAR\n')
 
-smv_file.write(f'channels : array 0..{NR_OF_CHANNELS} of 0..{NR_OF_NODES};\n')
-smv_file.write(f'sources : array 1..{NR_OF_CHANNELS} of 1..{NR_OF_NODES};\n')
-smv_file.write(f'targets : array 1..{NR_OF_CHANNELS} of 1..{NR_OF_NODES};\n')
-smv_file.write(f'routes : array 1..{NR_OF_NODES} of array 1..{NR_OF_NODES} of 0..{NR_OF_CHANNELS};\n');
-smv_file.write(f'D : boolean;\n')
+for i in range (1, NR_OF_CHANNELS + 1):
+    smv_file.write(f'c{i} : 0 .. {NR_OF_NODES};\n')
 
 smv_file.write('ASSIGN\n')
 
 for i in range (1, NR_OF_CHANNELS + 1):
-    smv_file.write(f'init(channels[{i}]) := 0;\n')
-
-for i in range(0, NR_OF_CHANNELS):
-    smv_file.write(f'init(sources[{i+1}]) := {SOURCES[i]};\n')
-    smv_file.write(f'init(targets[{i+1}]) := {TARGETS[i]};\n')
-
-for i in range(0, NR_OF_NODES):
-    for j in range(0, NR_OF_NODES):
-        smv_file.write(f'init(routes[{i+1}][{j+1}]) := {ROUTES[i][j]};\n')
-
-smv_file.write(f'init(D) := FALSE;\n')
+    smv_file.write(f'init(c{i}) := 0;\n')
 
 smv_file.write('TRANS\n')
 
-delim = '|'
 deadlock_check = '!('
 
-P = ''
+for i in range (1, NR_OF_CHANNELS + 1):
+    if i > 1:
+        smv_file.write(f'|\n')
 
-for i in range (0, NR_OF_CHANNELS):
-    channel_index = i + 1
+    if i in M:
+        for j in M:
+            if j == i:
+                continue
+            # Send
+            smv_file.write(f'case c{i} = 0 : next(c{i}) = {j};\n')
+            smv_file.write(f'     TRUE : next(c{i}) = c{i}; esac\n')
+            smv_file.write(f'|\n')
 
-    P += f'next(channels[{channel_index}]) = channels[{channel_index}] & '
+        deadlock_check += f'(c{i} = 0) | '
 
-P = P[:-2]
+    for n in range(1, NR_OF_NODES):
+        target = TARGETS[i-1]
+        next_channel = ROUTES[target - 1][n - 1]
 
-for i in range (0, NR_OF_CHANNELS):
-    if i > 0:
-        smv_file.write(f'{delim}\n')
+        if n > 1:
+            smv_file.write(f'|\n')
 
-    channel_index = i + 1
-    receive_check = f'channels[{channel_index}] = targets[{channel_index}]'
-    process_check = f'channels[{channel_index}] != 0 & channels[{channel_index}] != targets[{channel_index}] & routes[targets[{channel_index}]][channels[{channel_index}]] != 0 & channels[routes[targets[{channel_index}]][channels[{channel_index}]]] = 0'
+        # Receive
+        smv_file.write(f'case c{i} = {n} & {target} = {n} : next(c{i}) = 0;\n')
+        smv_file.write(f'     TRUE : next(c{i}) = c{i}; esac\n')
 
-    # Receive step
-    smv_file.write(f'case {receive_check} : next(channels[{channel_index}]) = 0;\n')
-     # Process step
-    smv_file.write(f'{process_check} : next(channels[routes[targets[{channel_index}]][channels[{channel_index}]]]) = channels[{channel_index}] & next(channels[{channel_index}]) = 0;\n')
-    smv_file.write(f'TRUE : {P}; esac\n')
+        deadlock_check += f'(c{i} = {n} & {target} = {n}) | '
 
-    deadlock_check += f'({receive_check}) | ({process_check}) |'
-# Send step
-for m_prime in M:
-    for m in M:
-        if m_prime != m:
-            smv_file.write(f'{delim}\n')
-            smv_file.write(f'case channels[routes[{m_prime}][{m}]] = 0 : next(channels[routes[{m_prime}][{m}]]) = {m};\n')
-            smv_file.write(f'TRUE : {P}; esac\n')
+        # Exclude messages that should be captured by receive
+        if n == target:
+            continue
+    
+        smv_file.write(f'|\n')
 
-            deadlock_check += f'channels[routes[{m_prime}][{m}]] = 0 | '
+        # Process
+        smv_file.write(f'case c{i} = {n} & {target} != {n} & c{next_channel} = 0 : next(c{i}) = 0 & next(c{next_channel}) = {n};\n')
+        smv_file.write(f'     TRUE : next(c{i}) = c{i}; esac\n')
 
+        deadlock_check += f'(c{i} = {n} & {target} != {n} & c{next_channel} = 0) | '
+        
 deadlock_check = deadlock_check[:-2]
 deadlock_check += ')'
 
-smv_file.write(f'{delim}\n')
-smv_file.write(f'case {deadlock_check} : next(D) = TRUE;\n')
-smv_file.write(f'TRUE : next(D) = D & {P}; esac;\n')
-
-smv_file.write(f'CTLSPEC !EF(D)')
+smv_file.write(f'CTLSPEC !EF({deadlock_check})')
