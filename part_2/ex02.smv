@@ -1,0 +1,68 @@
+
+MODULE main
+VAR
+SA : 0..110;
+SB : 0..160;
+SC : 0..110;
+SD : 0..160;
+ST : 0..250;
+CA : 0..110;
+CB : 0..160;
+CC : 0..110;
+CD : 0..160;
+CT : 0..250;
+currentVillage : 0..4;
+ASSIGN
+init(CA) := 110
+init(CB) := 160
+init(CC) := 110
+init(CD) := 160
+init(CT) := 250
+init(SA) := 80
+init(SB) := 80
+init(SC) := 80
+init(SD) := 80
+init(ST) := 250
+init(currentVillage) := 0;
+TRANS
+case currentVillage = 0 & SA - 15 >= 0 & SB - 15 >= 0 & SC - 15 >= 0 & SD - 15 >= 0 : next(currentVillage) = 1 & next(ST) = ST - 15 - (CA - SA) & next(SA) = CA & next(SB) = SB - 15 & next(SC) = SC - 15 & next(SD) = SD - 15;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 0 & SA - 15 >= 0 & SB - 15 >= 0 & SC - 15 >= 0 & SD - 15 >= 0 : next(currentVillage) = 3 & next(ST) = ST - 15 - (CC - SC) & next(SA) = SA - 15 & next(SB) = SB - 15 & next(SC) = CC & next(SD) = SD - 15;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 1 & SA - 15 >= 0 & SB - 15 >= 0 & SC - 15 >= 0 & SD - 15 >= 0 : next(currentVillage) = 0 & next(ST) = CT & next(SA) = SA - 15 & next(SB) = SB - 15 & next(SC) = SC - 15 & next(SD) = SD - 15;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 1 & SA - 12 >= 0 & SB - 12 >= 0 & SC - 12 >= 0 & SD - 12 >= 0 : next(currentVillage) = 3 & next(ST) = ST - 12 - (CC - SC) & next(SA) = SA - 12 & next(SB) = SB - 12 & next(SC) = CC & next(SD) = SD - 12;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 1 & SA - 17 >= 0 & SB - 17 >= 0 & SC - 17 >= 0 & SD - 17 >= 0 : next(currentVillage) = 2 & next(ST) = ST - 17 - (CB - SB) & next(SA) = SA - 17 & next(SB) = CB & next(SC) = SC - 17 & next(SD) = SD - 17;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 2 & SA - 17 >= 0 & SB - 17 >= 0 & SC - 17 >= 0 & SD - 17 >= 0 : next(currentVillage) = 1 & next(ST) = ST - 17 - (CA - SA) & next(SA) = CA & next(SB) = SB - 17 & next(SC) = SC - 17 & next(SD) = SD - 17;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 2 & SA - 10 >= 0 & SB - 10 >= 0 & SC - 10 >= 0 & SD - 10 >= 0 : next(currentVillage) = 3 & next(ST) = ST - 10 - (CC - SC) & next(SA) = SA - 10 & next(SB) = SB - 10 & next(SC) = CC & next(SD) = SD - 10;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 2 & SA - 20 >= 0 & SB - 20 >= 0 & SC - 20 >= 0 & SD - 20 >= 0 : next(currentVillage) = 4 & next(ST) = ST - 20 - (CD - SD) & next(SA) = SA - 20 & next(SB) = SB - 20 & next(SC) = SC - 20 & next(SD) = CD;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 3 & SA - 15 >= 0 & SB - 15 >= 0 & SC - 15 >= 0 & SD - 15 >= 0 : next(currentVillage) = 0 & next(ST) = CT & next(SA) = SA - 15 & next(SB) = SB - 15 & next(SC) = SC - 15 & next(SD) = SD - 15;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 3 & SA - 12 >= 0 & SB - 12 >= 0 & SC - 12 >= 0 & SD - 12 >= 0 : next(currentVillage) = 1 & next(ST) = ST - 12 - (CA - SA) & next(SA) = CA & next(SB) = SB - 12 & next(SC) = SC - 12 & next(SD) = SD - 12;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 3 & SA - 10 >= 0 & SB - 10 >= 0 & SC - 10 >= 0 & SD - 10 >= 0 : next(currentVillage) = 2 & next(ST) = ST - 10 - (CB - SB) & next(SA) = SA - 10 & next(SB) = CB & next(SC) = SC - 10 & next(SD) = SD - 10;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 3 & SA - 20 >= 0 & SB - 20 >= 0 & SC - 20 >= 0 & SD - 20 >= 0 : next(currentVillage) = 4 & next(ST) = ST - 20 - (CD - SD) & next(SA) = SA - 20 & next(SB) = SB - 20 & next(SC) = SC - 20 & next(SD) = CD;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 4 & SA - 20 >= 0 & SB - 20 >= 0 & SC - 20 >= 0 & SD - 20 >= 0 : next(currentVillage) = 2 & next(ST) = ST - 20 - (CB - SB) & next(SA) = SA - 20 & next(SB) = CB & next(SC) = SC - 20 & next(SD) = SD - 20;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+|
+case currentVillage = 4 & SA - 20 >= 0 & SB - 20 >= 0 & SC - 20 >= 0 & SD - 20 >= 0 : next(currentVillage) = 3 & next(ST) = ST - 20 - (CC - SC) & next(SA) = SA - 20 & next(SB) = SB - 20 & next(SC) = CC & next(SD) = SD - 20;
+     TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac

@@ -9,3 +9,124 @@ TRUE : next(a)=a; esac |
 case a<=50 : next(a) = 2*a;
 TRUE : next(a)=a; esac
 CTLSPEC EF (a=98)
+
+MODULE somtehing
+VAR
+routing : array 0..17 of array of 
+
+
+
+MODULE Channel
+VAR
+destination : 0..16;
+source: Node;
+target: Node;
+rout := array 0..16 of integer
+DEFINE
+destination := destination;
+target := target;
+source := source;
+rout := rout;
+
+MODULE Node
+VAR
+M : boolean;
+number : integer;
+DEFINE
+M := M;
+number := number;
+
+MODULE main
+VAR c1: Channel;
+VAR c2: Channel;
+VAR c3: Channel;
+VAR c4: Channel;
+VAR c5: Channel;
+VAR c6: Channel;
+VAR c7: Channel;
+VAR c8: Channel;
+VAR c9: Channel;
+VAR n1: Node;
+VAR n2: Node;
+VAR n3: Node;
+VAR n4: Node;
+VAR n5: Node;
+VAR n6: Node;
+VAR n7: Node;
+VAR n8: Node;
+VAR n9: Node;
+VAR n10: Node;
+ASSIGN
+init(n1.number) := 1;
+init(n1.M) := true;
+init(n2.number) := 2;
+init(n2.M) := false;
+init(n3.number) := 3;
+init(n3.M) := false;
+init(n4.number) := 4;
+init(n4.M) := false;
+init(n5.number) := 5;
+init(n5.M) := true;
+init(n6.number) := 6;
+init(n6.M) := false;
+init(n7.number) := 7;
+init(n7.M) := false;
+init(n8.number) := 8;
+init(n8.M) := false;
+init(n9.number) := 9;
+init(n9.M) := false;
+init(n10.number) := 10;
+init(n10.M) := false;
+
+init(c1.source) := n1;
+init(c1.target) := n2;
+init(c1.rout) := [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+init(c1.destination) := 0;
+
+init(c2.source) := n2;
+init(c2.target) := n3;
+init(c2.rout) := [2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+init(c2.destination) := 0;
+
+init(c3.source) := n3;
+init(c3.target) := n4;
+init(c3.rout) := [17, 17, 0, 3, 3, 3, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17];
+init(c3.destination) := 0;
+
+init(c4.source) := n4;
+init(c4.target) := n5;
+init(c4.rout) := [2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+init(c4.destination) := 0;
+
+init(c5.source) := n5;
+init(c5.target) := n6;
+init(c6.source) := n6;
+init(c6.target) := n7;
+init(c7.source) := n7;
+init(c7.target) := n8;
+init(c8.source) := n8;
+init(c8.target) := n9;
+init(c9.source) := n9;
+init(c9.target) := n10;
+
+TRANS
+case co.source.M & c0.rout[co.target.number].destination = 0 : next(c0.rout[co.target.number].destination) = 4;
+TRUE: next(c0.rout[4].destination) = 0;
+case c1.source.M & c1.rout[c1.target.number].destination = 0 : next(c1.rout[c1.target.number].destination) = 4;
+TRUE: next(c1.rout[4].destination) = 0;
+case c2.source.M & c2.rout[c2.target.number].destination = 0 : next(c2.rout[c2.target.number].destination) = 4;
+TRUE: next(c2.rout[4].destination) = 0;
+case c3.source.M & c3.rout[c3.target.number].destination = 0 : next(c3.rout[c3.target.number].destination) = 4;
+TRUE: next(c3.rout[4].destination) = 0;
+case c4.source.M & c4.rout[c4.target.number].destination = 0 : next(c4.rout[c4.target.number].destination) = 4;
+TRUE: next(c4.rout[4].destination) = 0;
+case c5.source.M & c5.rout[c5.target.number].destination = 0 : next(c5.rout[c5.target.number].destination) = 4;
+TRUE: next(c5.rout[4].destination) = 0;
+case c6.source.M & c6.rout[c6.target.number].destination = 0 : next(c6.rout[c6.target.number].destination) = 4;
+TRUE: next(c6.rout[4].destination) = 0;
+case c7.source.M & c7.rout[c7.target.number].destination = 0 : next(c7.rout[c7.target.number].destination) = 4;
+TRUE: next(c7.rout[4].destination) = 0;
+case c8.source.M & c8.rout[c8.target.number].destination = 0 : next(c8.rout[c8.target.number].destination) = 4;
+TRUE: next(c8.rout[4].destination) = 0;
+case c9.source.M & c9.rout[c9.target.number].destination = 0 : next(c9.rout[c9.target.number].destination) = 4;
+TRUE: next(c9.rout[4].destination) = 0;
