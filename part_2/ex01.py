@@ -31,7 +31,7 @@ ROUTES = [
             [24, 24, 18, 18, 18, 18, 20, 20, 20, 20, 22, 22, 22, 22, 24, 24, 0]
         ]
 
-M: Final = [1, 5, 9, 13]
+M: Final = [5, 11, 14]
 
 FILE_NAME: Final = 'ex01.smv'
 
@@ -40,71 +40,82 @@ smv_file = open(FILE_NAME, 'w')
 smv_file.write('\nMODULE main\n')
 smv_file.write('VAR\n')
 
-smv_file.write(f'channels : array 1 ..{NR_OF_CHANNELS} of 0..{NR_OF_NODES};\n')
-smv_file.write(f'sources : array 1 ..{NR_OF_CHANNELS} of 1..{NR_OF_NODES};\n')
-smv_file.write(f'targets : array 1 ..{NR_OF_CHANNELS} of 1..{NR_OF_NODES};\n')
-smv_file.write(f'routes : array 1..{NR_OF_NODES} of array 1..{NR_OF_NODES} of 0..{NR_OF_CHANNELS};\n');
-smv_file.write(f'D : boolean;\n')
+for i in range (1, NR_OF_CHANNELS + 1):
+    smv_file.write(f'c{i} : 0 .. {NR_OF_NODES};\n')
 
 smv_file.write('ASSIGN\n')
 
 for i in range (1, NR_OF_CHANNELS + 1):
-    smv_file.write(f'init(channels[{i}]) := 0;\n')
-
-for i in range(0, NR_OF_CHANNELS):
-    smv_file.write(f'init(sources[{i+1}]) := {SOURCES[i]};\n')
-    smv_file.write(f'init(targets[{i+1}]) := {TARGETS[i]};\n')
-
-for i in range(0, NR_OF_NODES):
-    for j in range(0, NR_OF_NODES):
-        smv_file.write(f'init(routes[{i+1}][{j+1}]) := {ROUTES[i][j]};\n')
-
-smv_file.write(f'init(D) := FALSE;\n')
+    smv_file.write(f'init(c{i}) := 0;\n')
 
 smv_file.write('TRANS\n')
 
-delim = '|'
 deadlock_check = '!('
 
-P = ''
+P = [''] * NR_OF_CHANNELS
 
-for i in range (0, NR_OF_CHANNELS):
-    channel_index = i + 1
+for i in range (1, NR_OF_CHANNELS + 1):
+    for j in range (1, NR_OF_CHANNELS + 1):
+        if i == j:
+            continue
+        P[i-1] += f'next(c{j}) = c{j} & '
 
-    P += f'next(channels[{channel_index}]) = channels[{channel_index}] & '
+    P[i-1] = P[i - 1][:-2]
 
-P = P[:-2]
+for i in range (1, NR_OF_CHANNELS + 1):
+    if i > 1:
+        smv_file.write(f'|\n')
 
-for i in range (0, NR_OF_CHANNELS):
-    if i > 0:
-        smv_file.write(f'{delim}\n')
+    channel_used_by_m = False;
 
-    channel_index = i + 1
-    receive_check = f'channels[{channel_index}] = targets[{channel_index}]'
-    process_check = f'channels[{channel_index}] != 0 & channels[{channel_index}] != targets[{channel_index}] & channels[routes[targets[{channel_index}]][channels[{channel_index}]]] = 0'
+    for s in M:
+        for t in M:
+            if s == t:
+                continue
 
-    # Receive step
-    smv_file.write(f'case {receive_check} : next(channels[{channel_index}]) = 0;\n')
-     # Process step
-    smv_file.write(f'{process_check} : next(channels[routes[targets[{channel_index}]][channels[{channel_index}]]]) = channels[{channel_index}] & next(channels[{channel_index}]) = 0;\n')
-    smv_file.write(f'TRUE : {P}; esac\n')
+            # OK step
+            if i == ROUTES[s - 1][t - 1]:
+                channel_used_by_m = True;
 
-    deadlock_check += f'({receive_check}) | ({process_check}) |'
-# Send step
-for m_prime in M:
-    for m in M:
-        if m_prime != m:
-            smv_file.write(f'{delim}\n')
-            smv_file.write(f'case channels[routes[{m_prime}][{m}]] = 0 : next(channels[routes[{m_prime}][{m}]]) = {m};\n')
-            smv_file.write(f'TRUE : {P}; esac\n')
+                # Send
+                smv_file.write(f'case c{i} = 0 : next(c{i}) = {t} & {P[i-1]};\n')
+                smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n')
+                smv_file.write(f'|\n')
 
-            deadlock_check += f'channels[routes[{m_prime}][{m}]] = 0 | '
+    if channel_used_by_m:
+        deadlock_check += f'(c{i} = 0) | '
 
+    for n in range(1, NR_OF_NODES):
+        target = TARGETS[i-1]
+        next_channel = ROUTES[target - 1][n - 1]
+
+        PPT = ''
+        for z in range(1, NR_OF_CHANNELS + 1):
+            if z == i or z == next_channel:
+                continue
+            PPT += f'next(c{z}) = c{z} & '
+        PPT = PPT[:-2]
+
+        if n > 1:
+            smv_file.write(f'|\n')
+
+        # Receive
+        if n == target:
+            smv_file.write(f'case c{i} = {n} : next(c{i}) = 0 & {P[i-1]};\n')
+            smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n')
+
+            deadlock_check += f'(c{i} = {n}) | '
+
+            # Exclude messages that should be captured by receive
+            continue;
+
+        # Process
+        smv_file.write(f'case c{i} = {n} & c{next_channel} = 0 : next(c{i}) = 0 & next(c{next_channel}) = {n} & {PPT};\n')
+        smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n')
+
+        deadlock_check += f'(c{i} = {n} & c{next_channel} = 0) | '
+        
 deadlock_check = deadlock_check[:-2]
 deadlock_check += ')'
 
-smv_file.write(f'{delim}\n')
-smv_file.write(f'case {deadlock_check} : next(D) = TRUE;\n')
-smv_file.write(f'TRUE : next(D) = D & {P}; esac;\n')
-
-smv_file.write(f'CTLSPEC !EF(D)')
+smv_file.write(f'\nCTLSPEC !EF({deadlock_check})')

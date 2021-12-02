@@ -18,7 +18,7 @@ ROUTES = [
             [4, 4, 4, 0]
         ]
 
-M: Final = [1, 2, 3, 4]
+M: Final = [1, 2, 3]
 
 FILE_NAME: Final = 'networkex.smv'
 
@@ -39,47 +39,70 @@ smv_file.write('TRANS\n')
 
 deadlock_check = '!('
 
+P = [''] * NR_OF_CHANNELS
+
+for i in range (1, NR_OF_CHANNELS + 1):
+    for j in range (1, NR_OF_CHANNELS + 1):
+        if i == j:
+            continue
+        P[i-1] += f'next(c{j}) = c{j} & '
+
+    P[i-1] = P[i - 1][:-2]
+
 for i in range (1, NR_OF_CHANNELS + 1):
     if i > 1:
         smv_file.write(f'|\n')
 
-    if i in M:
-        for j in M:
-            if j == i:
-                continue
-            # Send
-            smv_file.write(f'case c{i} = 0 : next(c{i}) = {j};\n')
-            smv_file.write(f'     TRUE : next(c{i}) = c{i}; esac\n')
-            smv_file.write(f'|\n')
+    channel_used_by_m = False;
 
+    for s in M:
+        for t in M:
+            if s == t:
+                continue
+
+            # OK step
+            if i == ROUTES[s - 1][t - 1]:
+                channel_used_by_m = True;
+
+                # Send
+                smv_file.write(f'case c{i} = 0 : next(c{i}) = {t} & {P[i-1]};\n')
+                smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n')
+                smv_file.write(f'|\n')
+
+    if channel_used_by_m:
         deadlock_check += f'(c{i} = 0) | '
 
     for n in range(1, NR_OF_NODES):
         target = TARGETS[i-1]
         next_channel = ROUTES[target - 1][n - 1]
 
+        PPT = ''
+        for z in range(1, NR_OF_CHANNELS + 1):
+            if z == i or z == next_channel:
+                continue
+            PPT += f'next(c{z}) = c{z} & '
+        PPT = PPT[:-2]
+
         if n > 1:
             smv_file.write(f'|\n')
 
         # Receive
-        smv_file.write(f'case c{i} = {n} & {target} = {n} : next(c{i}) = 0;\n')
-        smv_file.write(f'     TRUE : next(c{i}) = c{i}; esac\n')
-
-        deadlock_check += f'(c{i} = {n} & {target} = {n}) | '
-
-        # Exclude messages that should be captured by receive
         if n == target:
-            continue
-    
-        smv_file.write(f'|\n')
+            smv_file.write(f'case c{i} = {n} : next(c{i}) = 0 & {P[i-1]};\n')
+            smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n')
+
+            deadlock_check += f'(c{i} = {n}) | '
+
+            # Exclude messages that should be captured by receive
+            continue;
 
         # Process
-        smv_file.write(f'case c{i} = {n} & {target} != {n} & c{next_channel} = 0 : next(c{i}) = 0 & next(c{next_channel}) = {n};\n')
-        smv_file.write(f'     TRUE : next(c{i}) = c{i}; esac\n')
+        smv_file.write(f'case c{i} = {n} & c{next_channel} = 0 : next(c{i}) = 0 & next(c{next_channel}) = {n} & {PPT};\n')
+        smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n')
 
-        deadlock_check += f'(c{i} = {n} & {target} != {n} & c{next_channel} = 0) | '
+        deadlock_check += f'(c{i} = {n} & c{next_channel} = 0) | '
         
 deadlock_check = deadlock_check[:-2]
 deadlock_check += ')'
 
-smv_file.write(f'CTLSPEC !EF({deadlock_check})')
+smv_file.write(f'\nCTLSPEC !EF({deadlock_check})')
