@@ -13,16 +13,16 @@ CD : 0..160;
 CT : 0..250;
 currentVillage : 0..4;
 ASSIGN
-init(CA) := 110
-init(CB) := 160
-init(CC) := 110
-init(CD) := 160
-init(CT) := 250
-init(SA) := 80
-init(SB) := 80
-init(SC) := 80
-init(SD) := 80
-init(ST) := 250
+init(CA) := 110;
+init(CB) := 160;
+init(CC) := 110;
+init(CD) := 160;
+init(CT) := 250;
+init(SA) := 80;
+init(SB) := 80;
+init(SC) := 80;
+init(SD) := 80;
+init(ST) := 250;
 init(currentVillage) := 0;
 TRANS
 case currentVillage = 0 & SA - 15 >= 0 & SB - 15 >= 0 & SC - 15 >= 0 & SD - 15 >= 0 : next(currentVillage) = 1 & next(ST) = ST - 15 - (CA - SA) & next(SA) = CA & next(SB) = SB - 15 & next(SC) = SC - 15 & next(SD) = SD - 15;
@@ -66,3 +66,5 @@ case currentVillage = 4 & SA - 20 >= 0 & SB - 20 >= 0 & SC - 20 >= 0 & SD - 20 >
 |
 case currentVillage = 4 & SA - 20 >= 0 & SB - 20 >= 0 & SC - 20 >= 0 & SD - 20 >= 0 : next(currentVillage) = 3 & next(ST) = ST - 20 - (CC - SC) & next(SA) = SA - 20 & next(SB) = SB - 20 & next(SC) = CC & next(SD) = SD - 20;
      TRUE : next(CA) = CA & next(CB) = CB & next(CC) = CC & next(CD) = CD & next(CT) = CT & next(SA) = SA & next(SB) = SB & next(SC) = SC & next(SD) = SD & next(ST) = ST & next(currentVillage) = currentVillage; esac
+
+CTLSPEC !EF(!((((SB < 1) | (SC < 1) | (SD < 1)) & ((currentVillage = 0) | (currentVillage = 1))) | (((SA < 1) | (SC < 1) | (SD < 1)) & ((currentVillage = 0) | (currentVillage = 2))) | (((SA < 1) | (SB < 1) | (SD < 1)) & ((currentVillage = 0) | (currentVillage = 3))) | (((SA < 1) | (SB < 1) | (SC < 1)) & ((currentVillage = 0) | (currentVillage = 4)))))

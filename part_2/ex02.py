@@ -42,12 +42,12 @@ smv_file.write(f'currentVillage : 0..{NR_OF_VILLAGES};\n')
 smv_file.write('ASSIGN\n')
 
 for i in range(0, NR_OF_VILLAGES):
-    smv_file.write(f'init(C{VILLAGES[i]}) := {CAPACITY_VILLAGES[i]}\n')
-smv_file.write(f'init(CT) := {CAPACITY_TRUCK}\n')
+    smv_file.write(f'init(C{VILLAGES[i]}) := {CAPACITY_VILLAGES[i]};\n')
+smv_file.write(f'init(CT) := {CAPACITY_TRUCK};\n')
 
 for i in range(0, NR_OF_VILLAGES):
-    smv_file.write(f'init(S{VILLAGES[i]}) := {NR_OF_STORED_PACKAGES}\n')
-smv_file.write(f'init(ST) := {CAPACITY_TRUCK}\n')
+    smv_file.write(f'init(S{VILLAGES[i]}) := {NR_OF_STORED_PACKAGES};\n')
+smv_file.write(f'init(ST) := {CAPACITY_TRUCK};\n')
 smv_file.write(f'init(currentVillage) := 0;\n')
 
 smv_file.write('TRANS\n')
@@ -71,8 +71,8 @@ SOURCES_ROADS = [0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4]
 TARGETS_ROADS = [1, 3, 0, 3, 2, 1, 3, 4, 0, 1, 2, 4, 2, 3]
 
 for z in range(0, len(SOURCES_ROADS)):
-    if (z > 0):
-        smv_file.write(f'|\n')
+    # if (z > 0):
+        # smv_file.write(f'|\n')
     
     ALL_VILLAGE_CONDITION = ''
     ALL_VILLAGE_NEXT_BRANCH = ''
@@ -96,3 +96,44 @@ for z in range(0, len(SOURCES_ROADS)):
 
     smv_file.write(f'case currentVillage = {SOURCES_ROADS[z]} & {ALL_VILLAGE_CONDITION}: next(currentVillage) = {TARGETS_ROADS[z]} & {TRUCK_NEXT__BRANCH} & {ALL_VILLAGE_NEXT_BRANCH};\n')
     smv_file.write(f'{TRUE_CASE}\n')
+    if (z < len(SOURCES_ROADS) - 1):
+        smv_file.write(f'{delim}\n')
+
+smv_file.write(f'\nCTLSPEC !EF(!((((SB < 1) | (SC < 1) | (SD < 1)) & ((currentVillage = 0) | (currentVillage = 1))) | (((SA < 1) | (SC < 1) | (SD < 1)) & ((currentVillage = 0) | (currentVillage = 2))) | (((SA < 1) | (SB < 1) | (SD < 1)) & ((currentVillage = 0) | (currentVillage = 3))) | (((SA < 1) | (SB < 1) | (SC < 1)) & ((currentVillage = 0) | (currentVillage = 4)))))')
+
+# smv_file.write(f'\nCTLSPEC !EF(!
+#     (
+#         (
+#             (
+#                 (SB < 1) | (SC < 1) | (SD < 1) 
+#             ) &
+#             (
+#                 (currentVillage = 0) | (currentVillage = 1)
+#             )
+#         ) |
+#         (
+#             (
+#                 (SA < 1) | (SC < 1) | (SD < 1) 
+#             ) &
+#             (
+#                 (currentVillage = 0) | (currentVillage = 2)
+#             )
+#         ) |
+#         (
+#             (
+#                 (SA < 1) | (SB < 1) | (SD < 1) 
+#             ) &
+#             (
+#                 (currentVillage = 0) | (currentVillage = 3)
+#             )
+#         ) | 
+#         (
+#             (
+#                 (SA < 1) | (SB < 1) | (SC < 1) 
+#             ) &
+#             (
+#                 (currentVillage = 0) | (currentVillage = 4)
+#             )
+#         )
+#     )
+# )')
