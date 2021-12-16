@@ -31,7 +31,7 @@ ROUTES = [
             [24, 24, 18, 18, 18, 18, 20, 20, 20, 20, 22, 22, 22, 22, 24, 24, 0]
         ]
 
-M: Final = [5, 11, 14]
+M: Final = [11, 12, 13, 15]
 
 FILE_NAME: Final = 'ex01.smv'
 
@@ -63,8 +63,8 @@ for i in range (1, NR_OF_CHANNELS + 1):
     P[i-1] = P[i - 1][:-2]
 
 for i in range (1, NR_OF_CHANNELS + 1):
-    if i > 1:
-        smv_file.write(f'|\n')
+    # if i > 1:
+    #     smv_file.write(f'|\n')
 
     channel_used_by_m = False;
 
@@ -79,13 +79,13 @@ for i in range (1, NR_OF_CHANNELS + 1):
 
                 # Send
                 smv_file.write(f'case c{i} = 0 : next(c{i}) = {t} & {P[i-1]};\n')
-                smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n')
-                smv_file.write(f'|\n')
+                smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n|\n')
+                # smv_file.write(f'|\n')
 
     if channel_used_by_m:
         deadlock_check += f'(c{i} = 0) | '
 
-    for n in range(1, NR_OF_NODES):
+    for n in M:
         target = TARGETS[i-1]
         next_channel = ROUTES[target - 1][n - 1]
 
@@ -94,15 +94,15 @@ for i in range (1, NR_OF_CHANNELS + 1):
             if z == i or z == next_channel:
                 continue
             PPT += f'next(c{z}) = c{z} & '
-        PPT = PPT[:-2]
+        PPT = PPT[:-2]       
 
-        if n > 1:
-            smv_file.write(f'|\n')
+        # if n > 1:
+        #     smv_file.write(f'|\n')     
 
         # Receive
         if n == target:
             smv_file.write(f'case c{i} = {n} : next(c{i}) = 0 & {P[i-1]};\n')
-            smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n')
+            smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n|\n')
 
             deadlock_check += f'(c{i} = {n}) | '
 
@@ -112,6 +112,11 @@ for i in range (1, NR_OF_CHANNELS + 1):
         # Process
         smv_file.write(f'case c{i} = {n} & c{next_channel} = 0 : next(c{i}) = 0 & next(c{next_channel}) = {n} & {PPT};\n')
         smv_file.write(f'     TRUE : next(c{i}) = c{i} & {P[i-1]}; esac\n')
+
+        if i < NR_OF_CHANNELS +1:
+            smv_file.write(f'|\n')
+        else:
+            smv_file.write(f'\n')
 
         deadlock_check += f'(c{i} = {n} & c{next_channel} = 0) | '
         

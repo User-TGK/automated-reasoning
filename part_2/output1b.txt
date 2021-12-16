@@ -1,0 +1,72 @@
+*** This is NuSMV 2.6.0 (compiled on Wed Oct 14 15:36:56 2015)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2014, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification !(EF !(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((c1 = 2 | (c1 = 4 & c2 = 0)) | (c1 = 6 & c2 = 0)) | c2 = 0) | (c2 = 2 & c17 = 0)) | (c2 = 4 & c3 = 0)) | (c2 = 6 & c3 = 0)) | (c3 = 2 & c26 = 0)) | c3 = 4) | (c3 = 6 & c26 = 0)) | (c4 = 2 & c5 = 0)) | (c4 = 4 & c5 = 0)) | (c4 = 6 & c5 = 0)) | (c5 = 2 & c6 = 0)) | (c5 = 4 & c6 = 0)) | c5 = 6) | c6 = 0) | (c6 = 2 & c19 = 0)) | (c6 = 4 & c19 = 0)) | (c6 = 6 & c19 = 0)) | (c7 = 2 & c27 = 0)) | (c7 = 4 & c27 = 0)) | (c7 = 6 & c27 = 0)) | (c8 = 2 & c9 = 0)) | (c8 = 4 & c9 = 0)) | (c8 = 6 & c9 = 0)) | (c9 = 2 & c10 = 0)) | (c9 = 4 & c10 = 0)) | (c9 = 6 & c10 = 0)) | (c10 = 2 & c21 = 0)) | (c10 = 4 & c21 = 0)) | (c10 = 6 & c21 = 0)) | (c11 = 2 & c12 = 0)) | (c11 = 4 & c12 = 0)) | (c11 = 6 & c12 = 0)) | (c12 = 2 & c13 = 0)) | (c12 = 4 & c13 = 0)) | (c12 = 6 & c13 = 0)) | (c13 = 2 & c14 = 0)) | (c13 = 4 & c14 = 0)) | (c13 = 6 & c14 = 0)) | (c14 = 2 & c15 = 0)) | (c14 = 4 & c23 = 0)) | (c14 = 6 & c23 = 0)) | (c15 = 2 & c25 = 0)) | (c15 = 4 & c25 = 0)) | (c15 = 6 & c25 = 0)) | (c16 = 2 & c1 = 0)) | (c16 = 4 & c1 = 0)) | (c16 = 6 & c1 = 0)) | (c17 = 2 & c24 = 0)) | (c17 = 4 & c18 = 0)) | (c17 = 6 & c18 = 0)) | (c18 = 2 & c17 = 0)) | (c18 = 4 & c3 = 0)) | (c18 = 6 & c3 = 0)) | (c19 = 2 & c24 = 0)) | (c19 = 4 & c18 = 0)) | (c19 = 6 & c18 = 0)) | (c20 = 2 & c19 = 0)) | (c20 = 4 & c19 = 0)) | (c20 = 6 & c19 = 0)) | (c21 = 2 & c24 = 0)) | (c21 = 4 & c18 = 0)) | (c21 = 6 & c18 = 0)) | (c22 = 2 & c21 = 0)) | (c22 = 4 & c21 = 0)) | (c22 = 6 & c21 = 0)) | (c23 = 2 & c24 = 0)) | (c23 = 4 & c18 = 0)) | (c23 = 6 & c18 = 0)) | (c24 = 2 & c15 = 0)) | (c24 = 4 & c23 = 0)) | (c24 = 6 & c23 = 0)) | c25 = 2) | (c25 = 4 & c2 = 0)) | (c25 = 6 & c2 = 0)) | c26 = 0) | (c26 = 2 & c6 = 0)) | (c26 = 4 & c6 = 0)) | c26 = 6) | (c27 = 2 & c10 = 0)) | (c27 = 4 & c10 = 0)) | (c27 = 6 & c10 = 0)))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 1.1 <-
+    c1 = 0
+    c2 = 0
+    c3 = 0
+    c4 = 0
+    c5 = 0
+    c6 = 0
+    c7 = 0
+    c8 = 0
+    c9 = 0
+    c10 = 0
+    c11 = 0
+    c12 = 0
+    c13 = 0
+    c14 = 0
+    c15 = 0
+    c16 = 0
+    c17 = 0
+    c18 = 0
+    c19 = 0
+    c20 = 0
+    c21 = 0
+    c22 = 0
+    c23 = 0
+    c24 = 0
+    c25 = 0
+    c26 = 0
+    c27 = 0
+  -> State: 1.2 <-
+    c2 = 6
+  -> State: 1.3 <-
+    c2 = 0
+    c3 = 6
+  -> State: 1.4 <-
+    c2 = 4
+  -> State: 1.5 <-
+    c6 = 4
+  -> State: 1.6 <-
+    c6 = 0
+    c19 = 4
+  -> State: 1.7 <-
+    c6 = 4
+  -> State: 1.8 <-
+    c18 = 4
+    c19 = 0
+  -> State: 1.9 <-
+    c6 = 0
+    c19 = 4
+  -> State: 1.10 <-
+    c6 = 2
+  -> State: 1.11 <-
+    c26 = 2

@@ -1,0 +1,8 @@
+formulas(assumptions).
+(exists x (S(x) & (L(y) -> A(x,y)))).
+L(x) & B(x) ->
+-(exists y (S(y) & A(y,x))).
+end_of_list.
+formulas(goals).
+-(exists z (L(z) & B(z))).
+end_of_list.
