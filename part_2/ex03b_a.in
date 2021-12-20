@@ -1,0 +1,17 @@
+formulas(assumptions).
+
+% Associativity: x * (y * z) = (x * y) * z
+a(x, a(y, z)) = a(a(x, y), z).
+
+% Identity rules for I = y * y
+a(a(y, y), x) = x.
+a(x, a(y, y)) = x.
+
+end_of_list.
+
+formulas(goals).
+
+% Commutativity
+a(x, y) = a(y, x).
+
+end_of_list.
