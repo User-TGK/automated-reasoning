@@ -4,7 +4,7 @@ from typing import Final
 s = Solver()
 
 # Capacity limitations
-MAX_TRUCK_CAPACITY: Final = 250
+MAX_TRUCK_CAPACITY: Final = 260
 INITIAL_PACKAGES_IN_VILLAGES: Final = 80
 
 MAX_VILLAGE_A_CAPACITY: Final = 110
@@ -86,12 +86,63 @@ def previous_stock(village, current_iteration):
 
     print(f'Unknown village {village}')
 
+def print_solution(model):
+    global i
+
+    print('{:<12} {:<8} {:<8} {:<8} {:<8} {:<8} {:<8}'.format(
+    'Iteration', 'Position', 'Stock', 
+    'A stock', 'B stock', 'C stock', 'D stock'))
+
+    for n in range(i+1):
+        truck_p = model[truck_position[n]].as_long()
+        truck_s = model[truck_stock[n]].as_long()
+
+        assert(truck_p in LOCATIONS)
+        assert(truck_s >= 0 and truck_s <= MAX_TRUCK_CAPACITY)
+
+        village_a_s = model[village_a_stock[n]].as_long()
+        village_b_s = model[village_b_stock[n]].as_long()
+        village_c_s = model[village_c_stock[n]].as_long()
+        village_d_s = model[village_d_stock[n]].as_long()
+
+        assert(village_a_s >= 0 and village_a_s <= MAX_VILLAGE_A_CAPACITY)
+        assert(village_b_s >= 0 and village_a_s <= MAX_VILLAGE_B_CAPACITY)
+        assert(village_c_s >= 0 and village_a_s <= MAX_VILLAGE_C_CAPACITY)
+        assert(village_d_s >= 0 and village_a_s <= MAX_VILLAGE_D_CAPACITY)
+
+        if n > 0:
+            last_truck_p = model[truck_position[n - 1]].as_long()
+            last_truck_s = model[truck_stock[n - 1]].as_long()
+
+            cost = TRAVEL_TIMES[last_truck_p][truck_p]
+
+            assert(cost != -1)                
+
+            for village in VILLAGES:
+                l_stock = model[previous_stock(village, n)].as_long()
+                c_stock = model[current_stock(village, n)].as_long()
+
+                if village == truck_p:
+                    supplied = last_truck_s - truck_s
+
+                    assert(c_stock == l_stock - cost + supplied)
+                else:
+                    assert(c_stock == l_stock - cost)
+
+        print('{:<12} {:<8} {:<8} {:<8} {:<8} {:<8} {:<8}'.format(
+            n, truck_p, truck_s, village_a_s, village_b_s, village_c_s, village_d_s
+        ))
+
 # Recursion
 i = 0
 
 while True:
-    if i >= 33 and not (sat == s.check()):
-        print(f'Found unsatisfiable assignment after {i-1} iterations')
+    if i == 10:
+        if s.check() == sat:
+            print('Found lasso after {i} iterations')
+            print_solution(s.model())
+        else:
+            print('Not satisfiable within {i} iterations')
         break
 
     i += 1
