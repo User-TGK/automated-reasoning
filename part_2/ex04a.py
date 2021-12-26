@@ -4,6 +4,17 @@ from z3 import *
 NR_OF_STUDENTS: Final = 90
 NR_OF_COURSES: Final = 9
 NR_OF_ROUNDS: Final = 4
+COURSES: Final = [
+    "Calculus 1",
+    "Calculus 2",
+    "Matrix calculation",
+    "Linear Algebra",
+    "French",
+    "German",
+    "English",
+    "Software Development Management",
+    "Human Resource Management"
+]
 
 # At most 30 students can enrol for each course in each round
 MAX_STUDENTS_PER_COURSE_PER_ROUND: Final = 45
@@ -31,10 +42,10 @@ def bool_to_int_array(xs):
     return [If(xs[i], 1, 0) for i in range(len(xs))]
 
 def is_calculus_one_course(course_number):
-    return course_number == 0
+    return COURSES[course_number] == "Calculus 1"
 
 def is_calculus_two_course(course_number):
-    return course_number == 1
+    return COURSES[course_number] == "Calculus 2"
 
 for l in range(NR_OF_ROUNDS):
     for i in range(NR_OF_COURSES):
@@ -79,15 +90,32 @@ for j in range(NR_OF_STUDENTS):
     s.add(Implies(calculus_two_courses[1], calculus_one_courses[0]))
     s.add(Implies(calculus_two_courses[2], Or(calculus_one_courses[0], calculus_one_courses[1])))
     s.add(Implies(calculus_two_courses[3], Or(calculus_one_courses[0], calculus_one_courses[1], calculus_one_courses[2])))
+    # s.add(Implies(calculus_two_courses[4], Or(calculus_one_courses[0], calculus_one_courses[1], calculus_one_courses[2], calculus_one_courses[3])))
 
-for i in range(NR_OF_COURSES):
-    if (not is_calculus_two_course(i)):
-        continue
+# Code for problem 4b
+MAX_LANGUAGES_COURSES_PER_ROUND: Final = 1
+MAX_MATHEMATICS_COURSES_PER_ROUND: Final = 2
 
-    for j in range(NR_OF_STUDENTS):
-        s.add(Implies(student_follows_course_in_round[1][i][j], student_follows_course_in_round[0][i-1][j]))
-        s.add(Implies(student_follows_course_in_round[2][i][j], 
-                        And(student_follows_course_in_round[1][i-1][j], student_follows_course_in_round[0][i-1][j])))
+def is_mathematics_course(course_number):
+    return COURSES[course_number] == "Calculus 1" or COURSES[course_number] == "Calculus 2" or COURSES[course_number] == "Matrix calculation" or COURSES[course_number] == "Linear Algebra"
+
+def is_language_course(course_number):
+    return COURSES[course_number] == "French" or COURSES[course_number] == "German" or COURSES[course_number] == "English"
+
+for j in range(NR_OF_STUDENTS):
+    for l in range(NR_OF_ROUNDS):
+        mathematics_courses = []
+        languages_courses = []
+        for i in range(NR_OF_COURSES):
+            if is_mathematics_course(i):
+                mathematics_courses.append(student_follows_course_in_round[l][i][j])
+            elif is_language_course(i):
+                languages_courses.append(student_follows_course_in_round[l][i][j])
+        
+        mathematics_enrollments = bool_to_int_array(mathematics_courses)
+        languages_enrollments = bool_to_int_array(languages_courses)
+        s.add(Sum(mathematics_enrollments) <= MAX_MATHEMATICS_COURSES_PER_ROUND)
+        s.add(Sum(languages_enrollments) <= MAX_LANGUAGES_COURSES_PER_ROUND)
 
 x = s.check()
 print(x)
@@ -99,12 +127,7 @@ if (x == sat):
         print('-----------------------------------------------------------')
 
         for i in range(NR_OF_COURSES):
-            if (is_calculus_one_course(i)): 
-                print('    Course ' + str(i + 1) + ' (Calculus 1): ')
-            elif (is_calculus_two_course(i)):
-                print('    Course ' + str(i + 1) + ' (Calculus 2):')
-            else:
-                print('    Course ' + str(i + 1) + ':')
+            print('    Course ' + str(i + 1) + ' (' + COURSES[i] + '): ')
 
             number_of_students = 0
 
