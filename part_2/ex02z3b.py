@@ -3,6 +3,8 @@ from typing import Final
 
 s = Solver()
 
+ITERATIONS_ATTEMPT = 14
+
 # Capacity limitations
 MAX_TRUCK_CAPACITY: Final = 260
 INITIAL_PACKAGES_IN_VILLAGES: Final = 80
@@ -40,6 +42,8 @@ village_a_stock = [Int('Sa0')]
 village_b_stock = [Int('Sb0')]
 village_c_stock = [Int('Sc0')]
 village_d_stock = [Int('Sd0')]
+
+lasso_found = [[Bool(f'Found{i}{j}') for j in range(i + 1, ITERATIONS_ATTEMPT)] for i in range(ITERATIONS_ATTEMPT)]
 
 # Initialization
 s.add(truck_position[0] == LOCATION_S)
@@ -89,6 +93,11 @@ def previous_stock(village, current_iteration):
 def print_solution(model):
     global i
 
+    for s in range(ITERATIONS_ATTEMPT):
+        for f in range(s + 1, ITERATIONS_ATTEMPT):
+            if is_true(model.eval(lasso_found[s][f - s - 1])):
+                print(f'Start from iteration {s} to {f}')
+
     print('{:<12} {:<8} {:<8} {:<8} {:<8} {:<8} {:<8}'.format(
     'Iteration', 'Position', 'Stock', 
     'A stock', 'B stock', 'C stock', 'D stock'))
@@ -137,12 +146,7 @@ def print_solution(model):
 i = 0
 
 while True:
-    if i == 10:
-        if s.check() == sat:
-            print('Found lasso after {i} iterations')
-            print_solution(s.model())
-        else:
-            print('Not satisfiable within {i} iterations')
+    if i == ITERATIONS_ATTEMPT:
         break
 
     i += 1
@@ -210,5 +214,30 @@ while True:
         s.add(Implies(truck_position[i - 1] == location, Or(*next_location_choices)))
 
     truck_position.append(next_truck_position)
+
+contains_lasso = []
+
+for i in range(ITERATIONS_ATTEMPT):
+    for j in range(i + 1, ITERATIONS_ATTEMPT):
+        not_decreased = []
+
+        not_decreased.append(truck_position[j] == truck_position[i])
+        not_decreased.append(truck_stock[j] >= truck_stock[i])
+        not_decreased.append(village_a_stock[j] >= village_a_stock[i])
+        not_decreased.append(village_b_stock[j] >= village_b_stock[i])
+        not_decreased.append(village_c_stock[j] >= village_c_stock[i])
+        not_decreased.append(village_d_stock[j] >= village_d_stock[i])
+
+        lasso_found[i][j - i - 1] = And(*not_decreased)
+
+        contains_lasso.append(lasso_found[i][j - i - 1])
+
+s.add(Or(*contains_lasso))
+
+if s.check() == sat:
+    print(f'Found lasso after {i} iterations')
+    print_solution(s.model())
+else:
+    print(f'Not satisfiable within {i} iterations')
 
 print('Terminated')
